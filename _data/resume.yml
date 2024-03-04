@@ -1,0 +1,95 @@
+# If you have a `resume.json` file, copy it into `_data` and delete this file.
+# If you don't have a JSON Resume you can just edit this YAML file instead.
+# See also: <https://jsonresume.org/>.
+basics:
+  name: "João Aleixo"
+  label: "iOS developer"
+  picture: "/assets/img/me/me-240x240.JPG"
+  email: ""
+  website: "https://joaoaleixo.com"
+  summary: >
+    I'm João, an iOS developer with interests all over the place. 
+  location:
+    city: "Coimbra"
+    countryCode: "PT"
+  profiles:
+    - network: "X"
+      username: "jalxp"
+      url: ""
+    - network: "LinkedIn"
+      username: "João Aleixo"
+      url: "https://www.linkedin.com/in/jalxp/"
+work:
+  - company: "GoodBarber"
+    position: "iOS developer"
+    website: "https://goodbarber.com"
+    startDate: "2021-03-01"
+    endDate: ""
+    summary: >
+      GoodBarber is a first No Code App Builder ruled by a Design System. Offering users the best experience on mobile. Providing solutions in native iOS and Android apps with the best of UI and UX.
+    highlights:
+      - "Engineered a communication framework between WKWebView and JavaScript, activating native features such as event triggering and content management for enhanced web view interactions."
+      - "Expanded a component library with additional elements, ensuring alignment with the company’s design system for greater consistency and component reusability across various projects."
+      - "Integrated key frameworks including Stripe for payments, Google Ads for advertising, and Meta Event for analytics, enriching the product's capabilities and user experience."
+      - "Facilitated the App Store launch process for a mobile application by overseeing code signing, certificate management, provisioning profile setup, and push notification configuration."
+      - "Developed automated workflows in Bitrise for build generation and testing, optimizing the distribution to TestFlight and improving the efficiency of the testing phase."
+volunteer:
+  - organization: "Caspae"
+    position: "Teacher"
+    website: "https://caspae.pt"
+    summary: "Helped elementary school children making their first contact with the world of programming using Scratch"
+education:
+  - institution: "Instituto Superior de Engenharia de Coimbra"
+    area: "Computer Science"
+    studyType: "Bachelor"
+    startDate: "2016-09-01"
+    endDate: "2020-09-01"
+skills:
+  - name: "Languages"
+    level: "3/3"
+    keywords:
+      - "Swift"
+      - "Objective-C"
+      - "Python"
+  - name: "Frameworks"
+    level: "3/3"
+    keywords:
+      - "Cocoa Touch"
+      - "UIKit"
+      - "Combine"
+      - "SwiftUI"
+  - name: "Tools"
+    level: "3/3"
+    keywords:
+      - "Git"
+      - "Bitrise (CI/CD)"
+      - "TestFlight"
+      - "App Store Connect"
+  - name: "Practices"
+    level: "3/3"
+    keywords:
+      - "MVC"
+      - "MVVM"
+      - "Compositional Layout"
+      - "Diffable Data Sources"
+  - name: "Other"
+    level: "2/3"
+    keywords:
+      - "Prompt Engineering"
+      - "LLM Integration"
+      - "Co-pilot"
+languages:
+  - language: "Portuguese"
+    fluency: "Native — C2"
+  - language: "English"
+    fluency: "Bilingual Proficiency — C2"
+  - language: "German"
+    fluency: "Limited Working Proficiency — A2"
+interests:
+  - name: "Gaming"
+    keywords:
+      - "Strategy"
+      - "Indie"
+  - name: "Reading"
+    keywords:
+      - "Horror Manga"
