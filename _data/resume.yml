@@ -13,9 +13,6 @@ basics:
     city: "Coimbra"
     countryCode: "PT"
   profiles:
-    - network: "X"
-      username: "jalxp"
-      url: ""
     - network: "LinkedIn"
       username: "João Aleixo"
       url: "https://www.linkedin.com/in/jalxp/"
