@@ -1,7 +1,7 @@
 ---
-layout: page
+layout: welcome
 title: Hello!
-sitemap: false
+cover: true
 ---
 
 ## Hey there! Glad you're here!
