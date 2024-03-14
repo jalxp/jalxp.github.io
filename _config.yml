@@ -64,6 +64,8 @@ legal:
     url:               /LICENSE/
   - title:             NOTICE
     url:               /NOTICE/
+  - title:             LEGAL & PRIVACY
+    url:               /PRIVACY/
 
 # This text will appear in a `<small>` tag in the footer of every page.
 copyright:             © 2024. All rights reserved.
@@ -268,7 +270,7 @@ hydejack:
 
   # When using Google Analytics, set to `true` to display a cookie notice banner.
   # When enabled, no user-related data will be stored until the user gives consent.
-  cookies_banner:      false
+  cookies_banner:      true
 
   # Set to `true` if you would like to add a "Powered by Hydejack" link in the footer.
   # Note that this setting has no effect when using the free version.
