@@ -67,8 +67,7 @@ skills:
     keywords:
       - "MVC"
       - "MVVM"
-      - "Compositional Layout"
-      - "Diffable Data Sources"
+      - "MVVM-C"
   - name: "Other"
     level: "2/3"
     keywords:
