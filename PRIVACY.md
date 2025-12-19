@@ -8,7 +8,7 @@ sitemap: false
 * this list will be replaced by the toc
 {:toc .large-only}
 
-This page is all about keeping things straightforward and ensuring you know how I handle your privacy . Anything mentioned here applies to my website. Should you have any questions or concerns about how things run around here, feel free to drop me a line at [jalxp@icloud.com](mailto:jalxp@icloud.com).
+This page is all about keeping things straightforward and ensuring you know how I handle your privacy. Anything mentioned here applies to my website. Should you have any questions or concerns about how things run around here, feel free to drop me a line at [hello@joaoaleixo.com](mailto:hello@joaoaleixo.com).
 
 - The content on this website is my personal take on things. Unless specifically stated, it doesn't reflect the opinions or endorsements of anyone else I might be associated with.
 - I won't be held liable for any issues caused by third-party services linked to or used by my website.
