@@ -8,11 +8,10 @@ Joao:
   # Used at the bottom of each page and at the top of the `about` layout
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about:             |
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    
-    Open `_data/authors.yml` to edit this text.
+    iOS developer at GoodBarber, working mostly with Swift and Objective-C. Based in Coimbra, Portugal.
+
+    I write about iOS development, but also mess around with hardware projects, retro gaming, and radio stuff when I have time.
+    This site is where I share what I'm learning and working on.
 
   # This photo will be used in the about section
   picture:
@@ -26,11 +25,11 @@ Joao:
   # Comment/uncommet to show/hide
   # Rearrange to change the order in which they appear
   social:
+    email:           <hello@joaoaleixo.com>
     github:          jalxp
     linkedin:        jalxp
     stackoverflow:   6512773/jalxp
     # twitter:         jalxp
-    # email:           <mail@domain.tld>
     # rss:             https://<url>/feed.xml
     # facebook:        <username>
     # google:          <number>
