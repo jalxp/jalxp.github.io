@@ -3,12 +3,13 @@
 # See also: <https://jsonresume.org/>.
 basics:
   name: "João Aleixo"
-  label: "iOS developer"
+  label: "iOS Developer"
   picture: "/assets/img/me/me-240x240.JPG"
-  email: ""
+  email: "hello@joaoaleixo.com"
   website: "https://joaoaleixo.com"
   summary: >
-    I'm João, an iOS developer with interests all over the place. 
+    I'm an iOS developer with 5+ years of experience specialising in native app development using Swift, UIKit, and SwiftUI. I focus on building performant, user-friendly experiences backed by solid architecture, ensuring scalability and maintainability. I stay up-to-date with the latest trends and best practices in the iOS ecosystem by following technical blogs, attending conferences, and engaging in online communities.
+    I just want to build things that feel great to use, make people's lives a little better, and grow alongside a product and team that cares about the same things.
   location:
     city: "Coimbra"
     countryCode: "PT"
@@ -18,29 +19,36 @@ basics:
       url: "https://www.linkedin.com/in/jalxp/"
 work:
   - company: "GoodBarber"
-    position: "iOS developer"
+    position: "iOS Developer"
     website: "https://goodbarber.com"
-    startDate: "2021-03-01"
+    startDate: "2020-03-01"
     endDate: ""
     summary: >
-      GoodBarber is a first No Code App Builder ruled by a Design System. Offering users the best experience on mobile. Providing solutions in native iOS and Android apps with the best of UI and UX.
+      GoodBarber is a no-code app builder platform offering native iOS and Android apps with a strong focus on UI/UX and design systems.
     highlights:
-      - "Engineered a communication framework between WKWebView and JavaScript, activating native features such as event triggering and content management for enhanced web view interactions."
-      - "Expanded a component library with additional elements, ensuring alignment with the company’s design system for greater consistency and component reusability across various projects."
-      - "Integrated key frameworks including Stripe for payments, Google Ads for advertising, and Meta Event for analytics, enriching the product's capabilities and user experience."
-      - "Facilitated the App Store launch process for a mobile application by overseeing code signing, certificate management, provisioning profile setup, and push notification configuration."
-      - "Developed automated workflows in Bitrise for build generation and testing, optimizing the distribution to TestFlight and improving the efficiency of the testing phase."
+      - "Developed core user-facing features including token-based authentication, push notifications, and caching strategies, improving security, engagement, and app performance."
+      - "Expanded the component library and refactored multiple screens to align with an evolving design system, improving UI consistency across the app."
+      - "Integrated third-party SDKs including Stripe, Google Ads, Meta Events, and Lottie, improving revenue streams, analytics coverage, and user experience."
+      - "Configured workflows using CI/CD tools reducing TestFlight deployment time and improving the testing process."
+      - "Introduced AI tooling into development workflows, including local LLM deployment, MCP servers, and custom agents for code generation and documentation."
+      - "Created and maintained technical documentation and onboarding guides, facilitating knowledge transfer and mentoring interns and junior developers, reducing new developer ramp-up time."
+      - "Represented the company at Portuguese university career fairs, supporting technical recruitment and employer branding."
 volunteer:
   - organization: "Caspae"
-    position: "Teacher"
+    position: "Programming Instructor"
     website: "https://caspae.pt"
-    summary: "Helped elementary school children making their first contact with the world of programming using Scratch"
+    summary: "Introduced 5th-grade students to the fundamentals of programming using Scratch, sparking their interest in coding and technology."
 education:
   - institution: "Instituto Superior de Engenharia de Coimbra"
-    area: "Computer Science"
+    area: "Software Development"
     studyType: "Bachelor"
     startDate: "2016-09-01"
     endDate: "2020-09-01"
+  - institution: "Universidade de Coimbra"
+    area: "Physics"
+    studyType: "Bachelor"
+    startDate: "2012-09-01"
+    endDate: "2016-09-01"
 skills:
   - name: "Languages"
     level: "3/3"
@@ -48,18 +56,31 @@ skills:
       - "Swift"
       - "Objective-C"
       - "Python"
+      - "Go"
+      - "C"
   - name: "Frameworks"
     level: "3/3"
     keywords:
+      - "AlamoFire"
       - "Cocoa Touch"
-      - "UIKit"
       - "Combine"
+      - "CoreAnimation"
+      - "CoreData"
+      - "MapKit"
+      - "SDWebImage"
+      - "SwiftData"
+      - "Swift Testing"
       - "SwiftUI"
+      - "UIKit"
+      - "WidgetKit"
   - name: "Tools"
     level: "3/3"
     keywords:
+      - "JIRA"
+      - "Confluence"
       - "Git"
-      - "Bitrise (CI/CD)"
+      - "Instruments"
+      - "Bitrise"
       - "TestFlight"
       - "App Store Connect"
   - name: "Practices"
@@ -68,24 +89,35 @@ skills:
       - "MVC"
       - "MVVM"
       - "MVVM-C"
+      - "Design Patterns"
+      - "RESTful APIs"
+      - "Swift Concurrency"
+      - "Compositional Layouts"
+      - "Diffable Data Sources"
   - name: "Other"
-    level: "2/3"
+    level: "3/3"
     keywords:
-      - "Prompt Engineering"
-      - "LLM Integration"
-      - "Co-pilot"
+      - "AI Tooling (MCP, Agents, Local LLMs)"
+      - "UI/UX"
+      - "Figma"
 languages:
   - language: "Portuguese"
-    fluency: "Native — C2"
+    fluency: "Native speaker"
   - language: "English"
-    fluency: "Bilingual Proficiency — C2"
+    fluency: "Highly proficient"
   - language: "German"
     fluency: "Limited Working Proficiency — A2"
 interests:
+  - name: "Development"
+    keywords:
+      - "Game Development"
   - name: "Gaming"
     keywords:
       - "Strategy"
-      - "Indie"
   - name: "Reading"
     keywords:
-      - "Horror Manga"
+      - "Manga"
+      - "Sci-fi"
+  - name: "Hobbies"
+    keywords:
+      - "FPV Racing"
