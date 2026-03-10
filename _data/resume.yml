@@ -5,7 +5,6 @@ basics:
   name: "João Aleixo"
   label: "iOS Developer"
   picture: "/assets/img/me/me-240x240.JPG"
-  email: "hello@joaoaleixo.com"
   website: "https://joaoaleixo.com"
   summary: >
     I'm an iOS developer with 5+ years of experience specialising in native app development using Swift, UIKit, and SwiftUI. I focus on building performant, user-friendly experiences backed by solid architecture, ensuring scalability and maintainability. I stay up-to-date with the latest trends and best practices in the iOS ecosystem by following technical blogs, attending conferences, and engaging in online communities.
