@@ -50,10 +50,6 @@ author:
 menu:
   - title:             iOS
     url:               /ios/
-  - title:             Other
-    url:               /other/
-  - title:             About
-    url:               /about/
   - title:             Résumé
     url:               /resume/
 
