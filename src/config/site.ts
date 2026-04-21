@@ -33,10 +33,10 @@ export const site = {
   copyright: `© ${new Date().getFullYear()} João Aleixo. All rights reserved.`,
 
   defaults: {
-    accent: 'green',     // green | amber | red | blue | purple | mono
+    accent: 'amber',     // green | amber | red | blue | purple | mono
     theme: 'dark',       // dark | light
     fontpair: 'plex',    // space | plex | jet
-    scanlines: false,
+    scanlines: true,
   },
 } as const;
 

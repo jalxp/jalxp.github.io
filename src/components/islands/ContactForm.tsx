@@ -28,7 +28,7 @@ export default function ContactForm({ to, from }: Props) {
     return (
       <div className="c-sent">
         <pre className="c-sent-ascii">{` ┌─────────────────────────────┐
- │  TRANSMISSION SUCCESSFUL    │
+ │  TRANSMISSION SUCCESSFUL     │
  └─────────────────────────────┘`}</pre>
         <div className="c-sent-body">
           <div>

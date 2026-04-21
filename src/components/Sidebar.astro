@@ -1,5 +1,5 @@
 ---
-import SidebarTheme from './islands/SidebarTheme.tsx';
+import SidebarTheme from './SidebarTheme.astro';
 import SocialIcon from './primitives/SocialIcon.astro';
 import { author } from '../config/author';
 import { site } from '../config/site';
@@ -89,27 +89,27 @@ const uptimeInitial = formatUptime(author.since, new Date());
 
     <div class="side-sys">
       <div class="side-label"><span>SYSTEM</span></div>
-      <div class="clock">
-        <div class="clock-line"><span class="k">DATE</span><span class="v tabnum" id="sb-date">----.--.--</span></div>
-        <div class="clock-line"><span class="k">TIME</span><span class="v tabnum" id="sb-time">--:--:--</span></div>
-        <div class="clock-line"><span class="k">ZONE</span><span class="v">WET/UTC+0</span></div>
+      <div class="sys-rows">
+        <div class="sys-line"><span class="k">DATE</span><span class="v tabnum" id="sb-date">----.--.--</span></div>
+        <div class="sys-line"><span class="k">TIME</span><span class="v tabnum" id="sb-time">--:--:--</span></div>
+        <div class="sys-line"><span class="k">ZONE</span><span class="v">WET/UTC+0</span></div>
       </div>
-      <div class="sys-meta">
-        <div><span class="k">HOST</span><span class="v">joao.local</span></div>
-        <div><span class="k">SWIFT</span><span class="v">6.0</span></div>
-        <div><span class="k">XCODE</span><span class="v">26.4.1</span></div>
-        <div><span class="k">UPTIME</span><span class="v tabnum" id="sb-uptime" data-since={author.since}>{uptimeInitial}</span></div>
+      <div class="sys-grid">
+        <div class="sys-cell"><span class="k">SHELL</span><span class="v">zsh</span></div>
+        <div class="sys-cell"><span class="k">BYTES</span><span class="v tabnum" id="sb-bytes">—</span></div>
+        <div class="sys-cell"><span class="k">UPTIME</span><span class="v tabnum" id="sb-uptime" data-since={author.since}>{uptimeInitial}</span></div>
+        <div class="sys-cell"><span class="k">LOAD</span><span class="v tabnum" id="sb-load">—</span></div>
       </div>
     </div>
 
     <div class="side-theme">
       <div class="side-label"><span>THEME</span></div>
-      <SidebarTheme client:only="react" />
+      <SidebarTheme />
     </div>
 
     <div class="side-foot">
       {author.socials.map((s) => (
-        <a class="icon-btn" href={s.url} title={s.name} target={s.url.startsWith('http') ? '_blank' : undefined} rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}>
+        <a class="icon-btn" href={s.url} title={s.name} aria-label={s.name} target={s.url.startsWith('http') ? '_blank' : undefined} rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}>
           <SocialIcon name={s.name} size={14} />
         </a>
       ))}
@@ -122,8 +122,11 @@ const uptimeInitial = formatUptime(author.since, new Date());
     const $date = document.getElementById('sb-date');
     const $time = document.getElementById('sb-time');
     const $uptime = document.getElementById('sb-uptime');
+    const $bytes = document.getElementById('sb-bytes');
+    const $load = document.getElementById('sb-load');
     if (!$date || !$time) return;
     const pad = (n) => String(n).padStart(2, '0');
+
     const tickUptime = () => {
       if (!$uptime) return;
       const since = $uptime.dataset.since;
@@ -137,15 +140,65 @@ const uptimeInitial = formatUptime(author.since, new Date());
       const days = Math.floor((now - anchor) / 86400000);
       $uptime.textContent = `${years}y ${days}d`;
     };
+
+    const fmtBytes = (n) => {
+      if (n < 1024) return `${n}B`;
+      if (n < 1024 * 1024) return `${Math.round(n / 1024)}kB`;
+      return `${(n / (1024 * 1024)).toFixed(1)}MB`;
+    };
+    const tickBytes = () => {
+      if (!$bytes || !window.performance || !performance.getEntriesByType) return;
+      let total = 0;
+      const sum = (e) => { total += e.transferSize || e.encodedBodySize || 0; };
+      performance.getEntriesByType('navigation').forEach(sum);
+      performance.getEntriesByType('resource').forEach(sum);
+      $bytes.textContent = total > 0 ? fmtBytes(total) : 'cached';
+    };
+
+    const fmtMs = (ms) => {
+      if (ms < 1000) return `${Math.round(ms)}ms`;
+      return `${(ms / 1000).toFixed(2)}s`;
+    };
+    const tickLoad = () => {
+      if (!$load || !window.performance || !performance.getEntriesByType) return;
+      const nav = performance.getEntriesByType('navigation')[0];
+      if (!nav) return;
+      const t = nav.loadEventEnd || nav.domComplete;
+      if (t > 0) $load.textContent = fmtMs(t);
+    };
+
     const tick = () => {
       const d = new Date();
       $date.textContent = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
       $time.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     };
+
     tick();
     tickUptime();
     setInterval(tick, 1000);
     setInterval(tickUptime, 60_000);
+
+    // Bytes are only knowable after resources have loaded. Wait for the load
+    // event, then poll once more after a beat to catch any late-completing
+    // entries (e.g. fonts that finish slightly after `load`).
+    if (document.readyState === 'complete') {
+      tickBytes();
+      tickLoad();
+      setTimeout(() => { tickBytes(); tickLoad(); }, 500);
+    } else {
+      window.addEventListener('load', () => {
+        tickBytes();
+        tickLoad();
+        setTimeout(() => { tickBytes(); tickLoad(); }, 500);
+      });
+    }
+
+    // If the tab has been hidden for a long time, browsers throttle setInterval
+    // and the uptime can drift. Re-tick on visibility return so the value is
+    // always current the moment the user looks at it.
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) { tick(); tickUptime(); }
+    });
   })();
 </script>
 
@@ -165,6 +218,7 @@ const uptimeInitial = formatUptime(author.since, new Date());
     display: flex; flex-direction: column; gap: 22px;
     min-width: 0;
     overflow-y: auto;
+    scrollbar-gutter: stable;
   }
 
   .side-head { display: flex; flex-direction: column; gap: 14px; }
@@ -266,21 +320,31 @@ const uptimeInitial = formatUptime(author.since, new Date());
     color: var(--accent);
   }
 
-  .side-sys { display: flex; flex-direction: column; gap: 10px; }
-  .clock { display: flex; flex-direction: column; gap: 2px; }
-  .clock-line {
-    display: grid; grid-template-columns: 48px 1fr; gap: 10px;
+  .side-sys {
+    display: flex; flex-direction: column; gap: 12px;
     font-family: var(--mono-ui); font-size: 11px;
   }
-  .clock-line .k, .sys-meta .k {
+  .sys-rows { display: flex; flex-direction: column; gap: 2px; }
+  .sys-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 10px;
+  }
+  .sys-line {
+    display: grid; grid-template-columns: 48px 1fr; gap: 10px;
+    min-width: 0;
+  }
+  .sys-cell {
+    display: grid; grid-template-columns: 44px 1fr; gap: 8px;
+    min-width: 0;
+  }
+  .sys-line .k, .sys-cell .k {
     color: var(--ink-muted); letter-spacing: .1em;
   }
-  .clock-line .v, .sys-meta .v { color: var(--ink-dim); }
-  .sys-meta {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px;
-    font-family: var(--mono-ui); font-size: 11px;
+  .sys-line .v, .sys-cell .v {
+    color: var(--ink-dim);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
-  .sys-meta .k { margin-right: 6px; }
   .tabnum { font-variant-numeric: tabular-nums; }
 
   .side-foot {

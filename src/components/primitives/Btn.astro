@@ -6,9 +6,14 @@ interface Props {
 }
 const { href, variant = 'ghost', icon } = Astro.props;
 const Tag = href ? 'a' : 'button';
+const hasIconSlot = Astro.slots.has('icon');
 ---
 <Tag class:list={['btn', variant]} href={href} type={href ? undefined : 'button'}>
-  {icon && <span class="btn-icon">{icon}</span>}
+  {(hasIconSlot || icon) && (
+    <span class="btn-icon">
+      {hasIconSlot ? <slot name="icon" /> : icon}
+    </span>
+  )}
   <span class="btn-label"><slot /></span>
 </Tag>
 

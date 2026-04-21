@@ -1,0 +1,146 @@
+---
+const accents = [
+  { id: 'green',  label: 'phosphor', hex: '#00ff9c' },
+  { id: 'amber',  label: 'amber',    hex: '#ffb454' },
+  { id: 'red',    label: 'red',      hex: '#ff5f57' },
+  { id: 'blue',   label: 'ibm blue', hex: '#58a6ff' },
+  { id: 'purple', label: 'ultra',    hex: '#c38bff' },
+  { id: 'mono',   label: 'mono',     hex: '#d4d4d4' },
+] as const;
+---
+<div class="theme-body">
+  <div class="theme-row">
+    {accents.map((a) => (
+      <button
+        type="button"
+        class="theme-sw"
+        data-accent={a.id}
+        title={a.label}
+        aria-label={`accent ${a.label}`}
+      >
+        <span style={`background:${a.hex};box-shadow:0 0 8px ${a.hex}`} />
+      </button>
+    ))}
+  </div>
+  <div class="theme-toggles">
+    <button type="button" class="theme-btn" data-toggle="theme" title="Toggle light / dark">
+      <span class="tb-ic" data-when="dark">●</span>
+      <span class="tb-ic" data-when="light">○</span>
+      <span data-when="dark">dark</span>
+      <span data-when="light">paper</span>
+    </button>
+    <button type="button" class="theme-btn" data-toggle="scanlines" title="Toggle CRT scanlines">
+      <span class="tb-ic" data-scan="on">≡</span>
+      <span class="tb-ic" data-scan="off">─</span>
+      <span>scanlines</span>
+    </button>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const KEY = 'jaPortfolio:prefs';
+    const html = document.documentElement;
+    const load = () => {
+      try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; }
+    };
+    const save = (p) => {
+      try { localStorage.setItem(KEY, JSON.stringify(p)); } catch {}
+    };
+
+    // Mark active states based on whatever the head boot-script already applied.
+    const syncActive = () => {
+      const accent = html.dataset.accent || 'green';
+      const theme  = html.dataset.theme  || 'dark';
+      const scan   = document.body.classList.contains('scanlines');
+      document.querySelectorAll('.theme-sw[data-accent]').forEach((b) => {
+        b.classList.toggle('on', b.dataset.accent === accent);
+      });
+      const themeBtn = document.querySelector('.theme-btn[data-toggle="theme"]');
+      if (themeBtn) themeBtn.classList.toggle('on', theme === 'dark');
+      const scanBtn = document.querySelector('.theme-btn[data-toggle="scanlines"]');
+      if (scanBtn) scanBtn.classList.toggle('on', scan);
+    };
+
+    const init = () => {
+      syncActive();
+      document.querySelectorAll('.theme-sw[data-accent]').forEach((b) => {
+        b.addEventListener('click', () => {
+          const id = b.dataset.accent;
+          html.dataset.accent = id;
+          save({ ...load(), accent: id });
+          syncActive();
+        });
+      });
+      const themeBtn = document.querySelector('.theme-btn[data-toggle="theme"]');
+      themeBtn?.addEventListener('click', () => {
+        const next = (html.dataset.theme === 'dark') ? 'light' : 'dark';
+        html.dataset.theme = next;
+        save({ ...load(), theme: next });
+        syncActive();
+      });
+      const scanBtn = document.querySelector('.theme-btn[data-toggle="scanlines"]');
+      scanBtn?.addEventListener('click', () => {
+        const next = !document.body.classList.contains('scanlines');
+        document.body.classList.toggle('scanlines', next);
+        save({ ...load(), scanlines: next });
+        syncActive();
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+<style>
+  .theme-body { display: flex; flex-direction: column; gap: 10px; }
+  .theme-row { display: flex; gap: 6px; }
+  .theme-sw {
+    width: 26px; height: 26px;
+    padding: 0;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .15s ease, transform .08s ease;
+  }
+  .theme-sw span { display: inline-block; width: 12px; height: 12px; border-radius: 2px; }
+  .theme-sw:hover { transform: translateY(-1px); }
+  .theme-sw.on {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 1px var(--ink);
+  }
+  .theme-toggles { display: flex; flex-direction: column; gap: 4px; }
+  .theme-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 8px;
+    background: var(--panel-2);
+    border: 1px solid var(--line-soft);
+    color: var(--ink-dim);
+    font-family: var(--mono-ui); font-size: 11px;
+    border-radius: 3px; cursor: pointer;
+    text-align: left;
+    transition: all .15s ease;
+  }
+  .theme-btn:hover { color: var(--ink); border-color: var(--line); }
+  .theme-btn.on {
+    color: var(--accent);
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+    background: color-mix(in oklab, var(--accent) 8%, var(--panel-2));
+  }
+  .theme-btn .tb-ic { color: var(--accent); width: 12px; text-align: center; }
+
+  /* Show only the spans for the currently active state. The head boot-script
+     sets html[data-theme] and body.scanlines before paint, so this resolves
+     correctly on first render — no flash. */
+  [data-when], [data-scan] { display: none; }
+  :global(html[data-theme="dark"])  [data-when="dark"]  { display: inline; }
+  :global(html[data-theme="light"]) [data-when="light"] { display: inline; }
+  :global(body:not(.scanlines)) [data-scan="off"] { display: inline; }
+  :global(body.scanlines)       [data-scan="on"]  { display: inline; }
+</style>

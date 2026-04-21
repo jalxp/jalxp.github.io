@@ -36,6 +36,7 @@ const ogImageUrl = ogImage
 const accent = site.defaults.accent;
 const theme = site.defaults.theme;
 const fontpair = site.defaults.fontpair;
+const scanlines = site.defaults.scanlines;
 
 const navRoutes = site.menu.map((m) => m.href);
 
@@ -72,6 +73,9 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.title} — writing`} href="/rss.xml" />
 
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.title} />
     <meta property="og:title" content={pageTitle} />
@@ -92,7 +96,7 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
       href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DotGothic16&family=IBM+Plex+Mono:wght@400;600&family=JetBrains+Mono:wght@400;600&family=Major+Mono+Display&family=VT323&display=optional"
     />
 
-    <script is:inline>
+    <script is:inline define:vars={{ defaultScanlines: scanlines }}>
       (() => {
         try {
           const html = document.documentElement;
@@ -105,12 +109,15 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
             html.dataset.theme = 'light';
           }
           if (p.fontpair) html.dataset.fontpair = p.fontpair;
-          if (p.scanlines) document.addEventListener('DOMContentLoaded', () => document.body.classList.add('scanlines'));
+          const scanFinal = (typeof p.scanlines === 'boolean') ? p.scanlines : defaultScanlines;
+          document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.toggle('scanlines', scanFinal);
+          });
         } catch {}
       })();
     </script>
   </head>
-  <body>
+  <body class={scanlines ? 'scanlines' : undefined}>
     <Sidebar />
     <main class="main">
       <header class="top">
