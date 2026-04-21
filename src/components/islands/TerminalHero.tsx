@@ -378,6 +378,20 @@ export default function TerminalHero({ lines, sessionLabel = 'SESSION 001' }: Pr
         height: 340px;
         overflow-y: auto;
       }
+      /* mobile: internal scroll fights page scroll. keep the fixed height
+         and pin content to the bottom so new lines push older ones out the
+         top (visually clipped), matching auto-scroll-to-bottom without the
+         interactive scroll. flex-shrink: 0 is required — otherwise flex
+         compresses lines on top of each other when content exceeds height. */
+      @media (max-width: 900px) {
+        .term-body {
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+        }
+        .term-body > * { flex-shrink: 0; }
+      }
       .tline {
         display: grid; grid-template-columns: 18px 1fr; gap: 8px;
         padding: 3px 0;

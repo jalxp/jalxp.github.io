@@ -75,6 +75,10 @@ body.scanlines::before {
   50% { opacity: .94; }
   52% { opacity: .97; }
 }
+@media (max-width: 900px) {
+  /* scanlines read much heavier on small, dense screens — halve the overlay */
+  body.scanlines::before { opacity: .25; }
+}
 
 /* chips used across pages */
 .chip {

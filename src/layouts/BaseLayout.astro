@@ -118,6 +118,21 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
   </head>
   <body class={scanlines ? 'scanlines' : undefined}>
     <Sidebar />
+    <div class="sb-backdrop" data-sb-backdrop aria-hidden="true" />
+    <button
+      class="menu-fab"
+      type="button"
+      data-sb-toggle
+      aria-label="Toggle navigation"
+      aria-controls="sidebar"
+      aria-expanded="false"
+    >
+      <span class="menu-icon" aria-hidden="true">
+        <span class="menu-bar" />
+        <span class="menu-bar" />
+        <span class="menu-bar" />
+      </span>
+    </button>
     <main class="main">
       <header class="top">
         <div class="top-path">
@@ -142,7 +157,7 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
           <span class="sep">·</span>
           <a href="/privacy/">privacy</a>
         </div>
-        <div>
+        <div class="foot-kbd">
           <span class="kbd-hint">1–{site.menu.length}</span>
           <span>navigate</span>
           <span class="sep">·</span>
@@ -189,6 +204,30 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
       })();
     </script>
 
+    <script is:inline>
+      (() => {
+        const setExpanded = (v) => {
+          const btn = document.querySelector('[data-sb-toggle]');
+          if (btn) btn.setAttribute('aria-expanded', String(v));
+        };
+        const open = () => { document.body.classList.add('sb-open'); setExpanded(true); };
+        const close = () => { document.body.classList.remove('sb-open'); setExpanded(false); };
+        const toggle = () => (document.body.classList.contains('sb-open') ? close() : open());
+
+        document.addEventListener('click', (e) => {
+          const t = e.target;
+          if (!(t instanceof Element)) return;
+          if (t.closest('[data-sb-toggle]')) { toggle(); return; }
+          if (t.closest('[data-sb-backdrop]')) { close(); return; }
+          // tapping a nav link inside the drawer closes it before navigation
+          if (document.body.classList.contains('sb-open') && t.closest('.side a[href]')) close();
+        });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.body.classList.contains('sb-open')) close();
+        });
+      })();
+    </script>
+
     <style>
       .main {
         margin-left: 280px;
@@ -207,6 +246,65 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
         font-family: var(--mono-ui); font-size: 12px;
         display: flex; align-items: center; gap: 4px;
       }
+
+      .menu-fab {
+        display: none;
+        position: fixed;
+        right: calc(16px + env(safe-area-inset-right, 0px));
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        width: 46px; height: 46px;
+        padding: 0;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        color: var(--accent);
+        cursor: pointer;
+        align-items: center; justify-content: center;
+        box-shadow:
+          0 8px 22px color-mix(in oklab, black 50%, transparent),
+          0 0 0 1px color-mix(in oklab, var(--accent) 22%, transparent),
+          0 0 20px color-mix(in oklab, var(--accent) 22%, transparent);
+        z-index: 11;
+      }
+      .menu-fab:hover {
+        border-color: var(--accent);
+        box-shadow:
+          0 8px 22px color-mix(in oklab, var(--accent) 28%, transparent),
+          0 0 0 1px var(--accent),
+          0 0 24px color-mix(in oklab, var(--accent) 40%, transparent);
+      }
+      .menu-fab:active { transform: translateY(1px); }
+
+      .menu-fab .menu-icon {
+        position: relative;
+        width: 18px; height: 14px;
+      }
+      .menu-fab .menu-bar {
+        position: absolute; left: 0; right: 0;
+        height: 1.75px;
+        background: currentColor;
+        border-radius: 1px;
+        transition: transform .22s cubic-bezier(.2,.7,.2,1), opacity .15s ease;
+      }
+      .menu-fab .menu-bar:nth-child(1) { top: 0; }
+      .menu-fab .menu-bar:nth-child(2) { top: 50%; transform: translateY(-50%); }
+      .menu-fab .menu-bar:nth-child(3) { bottom: 0; }
+      :global(body.sb-open) .menu-fab .menu-bar:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+      :global(body.sb-open) .menu-fab .menu-bar:nth-child(2) { opacity: 0; }
+      :global(body.sb-open) .menu-fab .menu-bar:nth-child(3) { bottom: auto; top: 50%; transform: translateY(-50%) rotate(-45deg); }
+
+      .sb-backdrop {
+        display: none;
+        position: fixed; inset: 0;
+        background: color-mix(in oklab, var(--bg) 70%, transparent);
+        backdrop-filter: blur(2px);
+        z-index: 9;
+        opacity: 0; pointer-events: none;
+        transition: opacity .18s ease;
+      }
+      :global(body.sb-open) .sb-backdrop { opacity: 1; pointer-events: auto; }
+      :global(body.sb-open) { overflow: hidden; }
       .p-seg { color: var(--ink-dim); }
       .p-sep { color: var(--ink-muted); padding: 0 2px; }
       .p-seg.active { color: var(--accent); }
@@ -256,7 +354,15 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
         .main { margin-left: 0; }
         .col  { padding: 20px 16px 60px; }
         .top  { padding: 10px 16px; }
-        .foot { padding: 12px 16px; flex-direction: column; gap: 6px; align-items: flex-start; }
+        .menu-fab { display: inline-flex; }
+        .sb-backdrop { display: block; }
+        /* keyboard shortcuts are keyboard-only — hide on touch devices */
+        .foot-kbd { display: none; }
+        /* reserve vertical space so the floating MENU button never overlaps footer links */
+        .foot {
+          padding: 12px 16px calc(72px + env(safe-area-inset-bottom, 0px));
+          flex-direction: column; gap: 6px; align-items: flex-start;
+        }
       }
     </style>
   </body>

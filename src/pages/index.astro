@@ -178,6 +178,17 @@ const fmtDate = (d: Date) => {
   .p-read { color: var(--ink-muted); }
   .p-arrow { color: var(--ink-muted); transition: transform .18s ease; }
 
+  @media (max-width: 900px) {
+    /* 3 columns get cramped on narrow screens — stack each row into 3 rows */
+    .posts a {
+      grid-template-columns: 1fr;
+      gap: 4px;
+      padding: 12px 4px;
+    }
+    .posts a:hover { padding-left: 4px; }
+    .p-meta { gap: 8px; }
+  }
+
   .home-cta {
     display: flex;
     align-items: center;
