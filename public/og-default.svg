@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#0e1410"/>
+    </linearGradient>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#00ff9c" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Scanline overlay -->
+  <g opacity="0.08">
+    <rect width="1200" height="2" y="0" fill="#00ff9c"/>
+    <rect width="1200" height="2" y="4" fill="#00ff9c"/>
+    <rect width="1200" height="2" y="8" fill="#00ff9c"/>
+  </g>
+
+  <!-- Window chrome -->
+  <rect x="60" y="60" width="1080" height="510" rx="6" fill="#0f1612" stroke="#1f2a24" stroke-width="1"/>
+  <rect x="60" y="60" width="1080" height="36" rx="6" fill="#0a0f0d"/>
+  <rect x="60" y="90" width="1080" height="6" fill="#0a0f0d"/>
+  <circle cx="90"  cy="78" r="6" fill="#ff5f57"/>
+  <circle cx="115" cy="78" r="6" fill="#ffb454"/>
+  <circle cx="140" cy="78" r="6" fill="#00ff9c"/>
+  <text x="170" y="83" font-family="'IBM Plex Mono', 'Space Mono', ui-monospace, monospace" font-size="13" fill="#6c7a72" letter-spacing="2">~/joaoaleixo.com</text>
+
+  <!-- Kicker -->
+  <text x="110" y="170" font-family="'IBM Plex Mono', 'Space Mono', ui-monospace, monospace" font-size="22" fill="#6c7a72" letter-spacing="4">// ./whoami</text>
+
+  <!-- Name -->
+  <text x="110" y="290" font-family="'Space Mono', ui-monospace, monospace" font-size="92" font-weight="700" fill="#e6ece8" filter="url(#glow)">João Aleixo</text>
+
+  <!-- Accent bar + role -->
+  <rect x="110" y="340" width="6" height="44" fill="#00ff9c" filter="url(#glow)"/>
+  <text x="132" y="374" font-family="'IBM Plex Mono', 'Space Mono', ui-monospace, monospace" font-size="28" fill="#9aa89f">iOS engineer · chronic tinkerer</text>
+
+  <!-- Tagline -->
+  <text x="110" y="440" font-family="'Space Mono', ui-monospace, monospace" font-size="22" fill="#6c7a72">Swift by day. Homelab, radio, and rabbit holes by night.</text>
+
+  <!-- Footer -->
+  <line x1="110" y1="490" x2="1090" y2="490" stroke="#1f2a24" stroke-width="1" stroke-dasharray="4 4"/>
+  <text x="110" y="530" font-family="'IBM Plex Mono', 'Space Mono', ui-monospace, monospace" font-size="18" fill="#00ff9c">&gt;</text>
+  <text x="132" y="530" font-family="'IBM Plex Mono', 'Space Mono', ui-monospace, monospace" font-size="18" fill="#9aa89f">joaoaleixo.com</text>
+  <text x="1090" y="530" font-family="'IBM Plex Mono', 'Space Mono', ui-monospace, monospace" font-size="14" fill="#6c7a72" text-anchor="end">Coimbra · Portugal</text>
+</svg>

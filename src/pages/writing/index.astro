@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeader from '../../components/primitives/SectionHeader.astro';
+import Win from '../../components/primitives/Win.astro';
+import { getCollection } from 'astro:content';
+import { readingTime } from '../../utils/readingTime';
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .map((p) => ({ ...p, minutes: readingTime(p.body ?? '').minutes }));
+
+const fmtDate = (d: Date) => {
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${y}.${m}.${day}`;
+};
+---
+<BaseLayout title="writing" description="All posts by João Aleixo — tutorials, deep dives, rants.">
+  <div class="page-enter writing-index">
+    <SectionHeader
+      kicker="// cat ./writing.log"
+      num="04"
+      title="writing"
+      subtitle={`${posts.length} post${posts.length === 1 ? '' : 's'} · tutorials, deep dives, rants`}
+    />
+
+    <Win title="writing.log" hasFooter>
+      <div slot="footer">
+        <span>{posts.length} entries</span>
+        <span><a href="/rss.xml">RSS</a></span>
+      </div>
+      <ul class="posts">
+        {posts.map((p) => (
+          <li>
+            <a href={`/writing/${p.id}/`}>
+              <span class="p-date tabnum">{fmtDate(p.data.pubDate)}</span>
+              <span class="p-title">{p.data.title}</span>
+              <span class="p-meta">
+                <span class="p-read tabnum">{p.minutes}m</span>
+                {p.data.tags[0] && <span class="p-tag">#{p.data.tags[0]}</span>}
+                <span class="p-arrow">→</span>
+              </span>
+            </a>
+            <p class="p-desc">{p.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </Win>
+  </div>
+</BaseLayout>
+
+<style>
+  .writing-index { display: flex; flex-direction: column; gap: 20px; }
+  .posts {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column;
+  }
+  .posts li + li { border-top: 1px dashed var(--line-soft); }
+  .posts li { padding: 14px 0; }
+  .posts a {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 4px 4px;
+    text-decoration: none;
+    color: var(--ink);
+    font-family: var(--mono-ui);
+    font-size: 13px;
+    transition: background .15s ease, padding .15s ease;
+    border-radius: 2px;
+  }
+  .posts a:hover {
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    padding-left: 10px;
+    color: var(--accent);
+  }
+  .posts a:hover .p-arrow { color: var(--accent); transform: translateX(3px); }
+  .p-date { color: var(--ink-muted); font-size: 11px; }
+  .p-title { color: var(--ink); letter-spacing: .01em; }
+  .posts a:hover .p-title { color: var(--accent); }
+  .p-meta { display: flex; gap: 10px; align-items: center; font-size: 11px; color: var(--ink-muted); }
+  .p-tag { color: var(--accent); opacity: .8; }
+  .p-read { color: var(--ink-muted); }
+  .p-arrow { transition: transform .18s ease; }
+  .p-desc {
+    margin: 6px 0 0 114px;
+    font-family: var(--mono-body);
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    max-width: 64ch;
+    line-height: 1.6;
+  }
+  @media (max-width: 700px) {
+    .p-desc { margin-left: 0; }
+    .posts a { grid-template-columns: 80px 1fr; }
+    .p-meta { display: none; }
+  }
+</style>

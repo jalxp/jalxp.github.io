@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeader from '../../components/primitives/SectionHeader.astro';
+import Win from '../../components/primitives/Win.astro';
+import ProjectRow from '../../components/projects/ProjectRow.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const kinds = ['all', ...new Set(projects.map((p) => p.data.kind))];
+---
+<BaseLayout title="projects" description="Projects by João Aleixo — iOS work, homelab, games, side tools.">
+  <div class="page-enter projects">
+    <SectionHeader
+      kicker="// ls ~/projects"
+      num="02"
+      title="projects"
+      subtitle="apps, scripts, boxes with blinking lights"
+    />
+
+    <Win title="projects.db" hasMenu>
+      <div slot="menu" class="menu-row">
+        <span class="menu-item">File</span>
+        <span class="menu-item">View</span>
+        <div class="filt-group">
+          {kinds.map((k) => (
+            <button
+              class:list={['filt', { active: k === 'all' }]}
+              data-filter={k}
+            >
+              {k.replace('-', ' ')}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="proj-list">
+        {projects.map((p) => (
+          <ProjectRow
+            slug={p.id}
+            name={p.data.name}
+            tagline={p.data.tagline}
+            kind={p.data.kind}
+            year={p.data.year}
+            status={p.data.status}
+            tech={p.data.tech}
+            description={p.data.description}
+            link={p.data.link}
+            repo={p.data.repo}
+          />
+        ))}
+      </div>
+    </Win>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  (() => {
+    const buttons = document.querySelectorAll('.filt');
+    const rows = document.querySelectorAll('.pr');
+    buttons.forEach((b) => {
+      b.addEventListener('click', () => {
+        const target = b.getAttribute('data-filter');
+        buttons.forEach((x) => x.classList.toggle('active', x === b));
+        rows.forEach((r) => {
+          const show = target === 'all' || r.getAttribute('data-kind') === target;
+          r.style.display = show ? '' : 'none';
+        });
+      });
+    });
+  })();
+</script>
+
+<style>
+  .projects { display: flex; flex-direction: column; gap: 20px; }
+  .menu-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+  }
+  .menu-item { color: var(--ink-muted); cursor: default; }
+  .filt-group { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+  .filt {
+    background: transparent;
+    border: 1px solid var(--line-soft);
+    color: var(--ink-dim);
+    padding: 2px 8px;
+    font-family: var(--mono-ui);
+    font-size: 11px;
+    border-radius: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+  .filt:hover {
+    color: var(--accent);
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+  }
+  .filt.active {
+    color: var(--bg);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+</style>

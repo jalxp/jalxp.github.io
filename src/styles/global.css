@@ -1,0 +1,106 @@
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--mono-body);
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.tabnum { font-variant-numeric: tabular-nums; }
+
+/* page transition */
+.page-enter {
+  animation: pageIn .22s cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* window grow-down reveal — cascaded by inline delay set in BaseLayout */
+.win, .term {
+  transform-origin: top center;
+  animation: winIn .34s cubic-bezier(.2,.75,.25,1) both;
+}
+@keyframes winIn {
+  from {
+    opacity: 0;
+    transform: scaleY(.92) translateY(-6px);
+    clip-path: inset(0 0 100% 0);
+  }
+  60% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .win, .term { animation: none; }
+}
+
+/* scanlines overlay (opt-in via body class)
+   Uses mix-blend-mode: overlay so dark stripes only show on bright pixels —
+   keeps "phosphor" bits CRT-lined without darkening empty space. */
+body.scanlines::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+  opacity: .55;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,.6) 0 1px,
+    transparent 1px 3px
+  );
+  animation: flicker 8s infinite;
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  48% { opacity: .97; }
+  50% { opacity: .94; }
+  52% { opacity: .97; }
+}
+
+/* chips used across pages */
+.chip {
+  display: inline-block;
+  padding: 2px 7px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: var(--mono-ui);
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: .06em;
+}
+.chip.accent {
+  color: var(--accent);
+  border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+}
+
+.kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  background: var(--panel);
+  color: var(--ink-dim);
+  font-size: 10px;
+  font-family: var(--mono-ui);
+}

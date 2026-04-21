@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/primitives/SectionHeader.astro';
+import Terminal404 from '../components/islands/Terminal404.tsx';
+import { site } from '../config/site';
+---
+<BaseLayout title="404 — not found" description="This page doesn't exist.">
+  <div class="page-enter nf">
+    <SectionHeader
+      kicker="// stderr"
+      num="404"
+      title="not found"
+      subtitle="the page you asked for isn't on this disk."
+    />
+
+    <Terminal404 client:only="react" />
+
+    <noscript>
+      <div class="nf-fallback">
+        <p>page not found. try:</p>
+        <ul>
+          {site.menu.map((m) => (
+            <li><a href={m.href}>{m.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </noscript>
+  </div>
+</BaseLayout>
+
+<style>
+  .nf { display: flex; flex-direction: column; gap: 20px; padding-top: 20px; }
+  .nf-fallback {
+    font-family: var(--mono-body);
+    font-size: 14px;
+    color: var(--ink-dim);
+    padding: 14px;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .nf-fallback ul { padding-left: 20px; }
+  .nf-fallback a { color: var(--accent); }
+</style>

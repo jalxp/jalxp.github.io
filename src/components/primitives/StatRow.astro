@@ -1,0 +1,33 @@
+---
+interface Props {
+  k: string;
+  v: string;
+  accent?: boolean;
+}
+const { k, v, accent = false } = Astro.props;
+---
+<div class="stat-row">
+  <span class="k">{k}</span>
+  <span class:list={['v', { accent }]}>{v}</span>
+</div>
+
+<style>
+  .stat-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 12px;
+    padding: 5px 0;
+    font-family: var(--mono-ui);
+    font-size: 12px;
+  }
+  .stat-row + .stat-row { border-top: 1px dashed var(--line-soft); }
+  .k {
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-size: 10px;
+    align-self: center;
+  }
+  .v { color: var(--ink); }
+  .v.accent { color: var(--accent); }
+</style>

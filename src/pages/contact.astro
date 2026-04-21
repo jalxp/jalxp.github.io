@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/primitives/SectionHeader.astro';
+import Win from '../components/primitives/Win.astro';
+import SocialIcon from '../components/primitives/SocialIcon.astro';
+import ContactForm from '../components/islands/ContactForm.tsx';
+import { author } from '../config/author';
+import { site } from '../config/site';
+import { availability } from '../config/availability';
+---
+<BaseLayout title="contact" description="Get in touch with João Aleixo.">
+  <div class="page-enter contact">
+    <SectionHeader
+      kicker="// ./hello.sh"
+      num="06"
+      title="contact"
+      subtitle="the door is open. mostly."
+    />
+
+    <div class="contact-grid">
+      <Win title="compose.msg" hasFooter>
+        <div slot="footer">
+          <span>mailto://</span>
+          <span>opens in your mail client</span>
+        </div>
+        <ContactForm client:load to={author.email} from={site.title} />
+      </Win>
+
+      <div class="c-side">
+        <Win title="channels">
+          <div class="channels">
+            {author.socials.map((c) => (
+              <a class="chan" href={c.url} target="_blank" rel="noopener noreferrer">
+                <span class="chan-ic"><SocialIcon name={c.name} size={14} /></span>
+                <span class="chan-k">{c.name.toLowerCase()}</span>
+                <span class="chan-v">{c.handle}</span>
+                <span class="chan-arrow">→</span>
+              </a>
+            ))}
+          </div>
+        </Win>
+
+        <Win title="availability.cfg">
+          <div class="avail">
+            {availability.map((a) => (
+              <div class="avail-row">
+                <span class:list={['avail-dot', a.status]} />
+                <span class="avail-k">{a.key}</span>
+                <span class="avail-v">{a.value}</span>
+              </div>
+            ))}
+          </div>
+        </Win>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact { display: flex; flex-direction: column; gap: 20px; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+  .c-side { display: flex; flex-direction: column; gap: 18px; }
+
+  .channels { display: flex; flex-direction: column; }
+  .chan {
+    display: grid;
+    grid-template-columns: 28px 100px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 4px;
+    text-decoration: none;
+    font-family: var(--mono-ui);
+    font-size: 12px;
+    color: var(--ink);
+    transition: padding .15s ease, background .15s ease;
+    border-radius: 2px;
+  }
+  .chan + .chan { border-top: 1px dashed var(--line-soft); }
+  .chan:hover {
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    padding-left: 10px;
+  }
+  .chan:hover .chan-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+  .chan-ic {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    color: var(--accent);
+    background: var(--panel-2);
+  }
+  .chan-ic :global(svg) { display: block; }
+  .chan-k {
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-size: 10px;
+  }
+  .chan-v { color: var(--ink); word-break: break-all; }
+  .chan-arrow { color: var(--ink-muted); transition: transform .18s ease; }
+
+  .avail { display: flex; flex-direction: column; }
+  .avail-row {
+    display: grid;
+    grid-template-columns: 10px 130px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+    font-family: var(--mono-ui);
+    font-size: 12px;
+  }
+  .avail-row + .avail-row { border-top: 1px dashed var(--line-soft); }
+  .avail-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .avail-dot.green {
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .avail-dot.amber { background: var(--amber); }
+  .avail-dot.red { background: #ff5f57; }
+  .avail-k {
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: 10px;
+  }
+  .avail-v { color: var(--ink); }
+</style>

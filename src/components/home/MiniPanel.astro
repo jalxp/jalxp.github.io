@@ -1,0 +1,39 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+<div class="mp">
+  <div class="mp-head">
+    <span class="mp-title">{title}</span>
+    <span class="mp-action"><slot name="action" /></span>
+  </div>
+  <div class="mp-body"><slot /></div>
+</div>
+
+<style>
+  .mp {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--panel);
+    display: flex;
+    flex-direction: column;
+  }
+  .mp-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line-soft);
+    background: var(--panel-2);
+  }
+  .mp-title {
+    font-family: var(--mono-ui);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .mp-body { padding: 14px; flex: 1; }
+</style>

@@ -1,0 +1,248 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/primitives/SectionHeader.astro';
+import Win from '../components/primitives/Win.astro';
+import StatRow from '../components/primitives/StatRow.astro';
+import Prompt from '../components/primitives/Prompt.astro';
+import AsciiDivider from '../components/primitives/AsciiDivider.astro';
+import { pinned } from '../config/pinned';
+import { rabbitHoles } from '../config/rabbit-holes';
+import { timeline } from '../config/timeline';
+---
+<BaseLayout title="about" description="Long-form readme for João Aleixo.">
+  <div class="page-enter about">
+    <SectionHeader
+      kicker="// man joao"
+      num="01"
+      title="about"
+      subtitle="the long-form readme"
+    />
+
+    <div class="about-grid">
+      <Win title="bio.md">
+        <div class="prose">
+          <p>
+            Hey, I'm João. <span class="acc">iOS engineer by day, chronic tinkerer by night.</span>
+          </p>
+          <p>
+            I've spent the last five years building mobile apps, sweating the
+            details on architecture, performance, and the kind of UX that feels
+            obvious in hindsight. My day job is GoodBarber's iOS engine — the
+            thing that ships as thousands of apps on the App Store. My nights
+            look different.
+          </p>
+          <p>
+            At night I'm usually down a rabbit hole. Running too many services
+            on a Proxmox box in the corner. Poking at Wi-Fi with a Raspberry
+            Pi. Chipping away at a 2D RTS in Godot that will probably never
+            ship. Learning to draw, badly, one box at a time.
+          </p>
+          <p>
+            This site is where I write things down. Tutorials when I've figured
+            something out worth sharing. Deep dives when a topic earns it. The
+            occasional rant about something obscure I can't stop thinking about.
+          </p>
+          <p>
+            No posting schedule. No content calendar. Just things I find
+            interesting, written well enough that you might too.
+          </p>
+          <p class="sig">
+            Whether you're a coder, a tinkerer, or just plain curious — there's
+            gonna be something here for you.
+          </p>
+          <p class="sig-name">— João</p>
+        </div>
+      </Win>
+
+      <div class="about-side">
+        <Win title="pinned.cfg">
+          <div class="pinned">
+            <Prompt cmd="cat ~/pinned" />
+            {pinned.filter((r) => r.value).map((r) => (
+              <StatRow k={r.key} v={r.value} accent={r.accent ?? false} />
+            ))}
+          </div>
+        </Win>
+
+        <Win title="rabbit-holes.txt">
+          <div class="holes" id="rabbit-holes">
+            {rabbitHoles.map((h) => (
+              <div class="hole" id={h.key}>
+                <span class="h-ic">{h.icon}</span>
+                <span class="h-k">{h.key}</span>
+                <span class="h-v">{h.desc}</span>
+              </div>
+            ))}
+          </div>
+        </Win>
+      </div>
+    </div>
+
+    <AsciiDivider label="timeline" />
+
+    <Win title="life.log" hasFooter>
+      <div slot="footer">
+        <span>{timeline.length} entries</span>
+        <span>tail -f ~/life.log</span>
+      </div>
+      <ol class="timeline">
+        <div class="tl-line" aria-hidden="true" />
+        {timeline.map((row, i) => (
+          <li class="tl-row" style={`--i: ${i}`}>
+            <span class="tl-year tabnum">{row.year}</span>
+            <span class="tl-dot" aria-hidden="true" />
+            <span class="tl-event">{row.event}</span>
+            <span class="tl-text">{row.text}</span>
+          </li>
+        ))}
+      </ol>
+    </Win>
+  </div>
+</BaseLayout>
+
+<style>
+  .about { display: flex; flex-direction: column; gap: 20px; }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .about-grid { grid-template-columns: 1fr; }
+  }
+  .about-side { display: flex; flex-direction: column; gap: 18px; }
+
+  .prose p {
+    font-family: var(--mono-body);
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--ink-dim);
+    margin: 0 0 14px;
+    max-width: 62ch;
+  }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose .acc { color: var(--accent); }
+  .prose .sig { color: var(--ink); }
+  .prose .sig-name {
+    font-family: var(--mono-display);
+    font-size: 24px;
+    color: var(--accent);
+    margin-top: 6px !important;
+  }
+
+  .pinned { display: flex; flex-direction: column; gap: 2px; }
+  .pinned :global(.prompt) {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .holes { display: flex; flex-direction: column; }
+  .hole {
+    display: grid;
+    grid-template-columns: 24px 80px 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 2px;
+    font-family: var(--mono-ui);
+    font-size: 12px;
+  }
+  .hole + .hole { border-top: 1px dashed var(--line-soft); }
+  .hole { scroll-margin-top: 24px; }
+  .hole:target {
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    animation: hole-flash 1.6s ease-out;
+  }
+  @keyframes hole-flash {
+    0%   { background: color-mix(in oklab, var(--accent) 22%, transparent); }
+    100% { background: color-mix(in oklab, var(--accent) 8%, transparent); }
+  }
+  .h-ic { font-size: 14px; }
+  .h-k {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: 10px;
+  }
+  .h-v { color: var(--ink-dim); }
+
+  .timeline {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+  }
+  .tl-line {
+    position: absolute;
+    left: 68px; top: 18px; bottom: 18px;
+    width: 1px;
+    background: repeating-linear-gradient(180deg, var(--line) 0 4px, transparent 4px 7px);
+    pointer-events: none;
+  }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 60px 16px 92px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+    font-family: var(--mono-ui);
+  }
+  .tl-row + .tl-row { border-top: 1px dashed var(--line-soft); }
+  .tl-year {
+    font-family: var(--mono-display);
+    font-size: 20px;
+    color: var(--ink-dim);
+    text-align: right;
+    letter-spacing: .02em;
+  }
+  .tl-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px color-mix(in oklab, var(--accent) 55%, transparent);
+    justify-self: center;
+    position: relative;
+    z-index: 1;
+  }
+  .tl-event {
+    justify-self: start;
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line));
+    border-radius: 2px;
+    background: color-mix(in oklab, var(--accent) 6%, transparent);
+    white-space: nowrap;
+  }
+  .tl-text {
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  @media (max-width: 620px) {
+    .tl-line { left: 12px; }
+    .tl-row {
+      grid-template-columns: 16px 1fr;
+      row-gap: 6px;
+      column-gap: 12px;
+      padding: 14px 0;
+    }
+    .tl-dot { grid-column: 1; grid-row: 1; }
+    .tl-year {
+      grid-column: 2; grid-row: 1;
+      text-align: left;
+      font-size: 18px;
+    }
+    .tl-event {
+      grid-column: 2; grid-row: 2;
+      justify-self: start;
+    }
+    .tl-text {
+      grid-column: 2; grid-row: 3;
+    }
+  }
+</style>

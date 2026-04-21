@@ -1,0 +1,72 @@
+---
+// Canonical intro copy — keep in sync with jalxp.github.io/index.md.
+---
+<div class="intro">
+  <div class="intro-kicker">// readme.md</div>
+  <p class="intro-lead">
+    Hey, I'm João. <span class="acc">iOS engineer by day, chronic tinkerer by night.</span>
+  </p>
+  <p>
+    I've spent the last five years building mobile apps — sweating the details on
+    architecture, performance, and the kind of UX that feels obvious in hindsight.
+    When I'm not pushing pixels and protocols on iOS, I'm usually down a rabbit hole:
+    running way too many containers on my homelab, poking at network traffic with a
+    wardriving Pi, or finally building that top-down RTS I've been meaning to get to
+    since forever.
+  </p>
+  <p>
+    This site is where I write things down. Tutorials when I've figured something out
+    worth sharing. Deep dives when a topic earns it. The occasional rant about
+    something obscure I can't stop thinking about.
+  </p>
+  <p class="intro-sig">
+    No posting schedule. No content calendar. Just things I find interesting, written
+    well enough that you might too.
+  </p>
+</div>
+
+<style>
+  .intro {
+    padding: 22px 24px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    position: relative;
+  }
+  .intro::before {
+    content: '';
+    position: absolute; left: 0; top: 16px; bottom: 16px; width: 3px;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .intro-kicker {
+    font-family: var(--mono-ui);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .intro p {
+    font-family: var(--mono-body);
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+    margin: 0 0 14px;
+    max-width: 64ch;
+  }
+  .intro-lead {
+    font-size: 16px !important;
+    color: var(--ink) !important;
+  }
+  .intro-lead .acc {
+    color: var(--accent);
+    text-shadow: 0 0 6px color-mix(in oklab, var(--accent) 40%, transparent);
+  }
+  .intro-sig {
+    font-style: italic;
+    color: var(--ink-muted) !important;
+    border-top: 1px dashed var(--line);
+    padding-top: 14px;
+  }
+</style>

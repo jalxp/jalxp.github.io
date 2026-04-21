@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import IntroBlock from '../components/home/IntroBlock.astro';
+import MiniPanel from '../components/home/MiniPanel.astro';
+import Btn from '../components/primitives/Btn.astro';
+import TerminalHero from '../components/islands/TerminalHero.tsx';
+import { now } from '../config/now';
+import { reading } from '../config/reading';
+import { getCollection } from 'astro:content';
+import { readingTime } from '../utils/readingTime';
+
+const heroLines = [
+  { k: '$', v: 'whoami',                                           delay: 200 },
+  { k: ' ', v: 'joão aleixo — engineer / tinkerer',                o: 'accent' as const, delay: 700 },
+  { k: '$', v: 'cat ./intro.txt',                                  delay: 1500 },
+  { k: ' ', v: 'ios engineer by day. chronic tinkerer by night.', delay: 2100 },
+  { k: ' ', v: 'five years shipping mobile apps. many more breaking things for fun.', delay: 2700 },
+  { k: '$', v: 'ls ./rabbit-holes',                                delay: 3400, tab: 8 },
+  { k: ' ', v: 'homelab/   networks/   gamedev/   retro/   swift/', o: 'cyan' as const, delay: 4000 },
+  { k: '$', v: ' ',                                                delay: 4600 },
+];
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5)
+  .map((p) => ({ ...p, minutes: readingTime(p.body ?? '').minutes }));
+
+const fmtDate = (d: Date) => {
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${y}.${m}.${day}`;
+};
+---
+<BaseLayout>
+  <div class="page-enter home">
+    <TerminalHero client:load lines={heroLines} />
+
+    <IntroBlock />
+
+    <div class="home-grid">
+      <MiniPanel title="// now">
+        <span slot="action" class="chip accent">LIVE</span>
+        <div class="now">
+          {now.map((row) => (
+            <div class="now-row">
+              <span class="k">{row.key}</span>
+              <span class="v">{row.value}</span>
+            </div>
+          ))}
+        </div>
+      </MiniPanel>
+
+      <MiniPanel title="// reading.log">
+        <span slot="action" class="mp-more">{reading.length} on the shelf</span>
+        <div class="read">
+          {reading.map((b) => (
+            <div class="read-row">
+              <span class:list={['read-dot', b.status]} title={b.status} />
+              <span class="read-title">{b.title}</span>
+              <span class="read-author">{b.author}</span>
+            </div>
+          ))}
+        </div>
+      </MiniPanel>
+    </div>
+
+    {posts.length > 0 && (
+      <MiniPanel title="// writing.log">
+        <a slot="action" class="mp-more" href="/writing/">all posts →</a>
+        <ul class="posts">
+          {posts.map((p) => (
+            <li>
+              <a href={`/writing/${p.id}/`}>
+                <span class="p-date tabnum">{fmtDate(p.data.pubDate)}</span>
+                <span class="p-title">{p.data.title}</span>
+                <span class="p-meta">
+                  <span class="p-read tabnum">{p.minutes}m</span>
+                  {p.data.tags[0] && <span class="p-tag">#{p.data.tags[0]}</span>}
+                  <span class="p-arrow">→</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </MiniPanel>
+    )}
+
+    <div class="home-cta">
+      <Btn icon="◇" href="/projects/">what i'm building</Btn>
+      <Btn icon="◉" href="/about/">about</Btn>
+      <Btn variant="primary" icon="→" href="/contact/">say hi</Btn>
+      <div class="home-cta-hint">
+        <span class="kbd">1-6</span> navigate
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .home { display: flex; flex-direction: column; gap: 22px; }
+  .home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 18px;
+  }
+  @media (max-width: 900px) {
+    .home-grid { grid-template-columns: 1fr; }
+  }
+  .now { display: flex; flex-direction: column; gap: 6px; font-family: var(--mono-ui); font-size: 12px; }
+  .now-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; }
+  .now-row .k { color: var(--ink-muted); }
+  .now-row .v { color: var(--ink); }
+
+  .mp-more {
+    font-family: var(--mono-ui);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .mp-more:hover { text-decoration: underline; }
+
+  .read { display: flex; flex-direction: column; }
+  .read-row {
+    display: grid;
+    grid-template-columns: 10px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 7px 2px;
+    font-family: var(--mono-ui);
+    font-size: 12px;
+  }
+  .read-row + .read-row { border-top: 1px dashed var(--line-soft); }
+  .read-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-muted); }
+  .read-dot.reading {
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+  }
+  .read-dot.queued { background: var(--ink-muted); opacity: .7; }
+  .read-dot.finished {
+    background: transparent;
+    border: 1px solid color-mix(in oklab, var(--accent) 40%, var(--line));
+  }
+  .read-title { color: var(--ink); letter-spacing: .01em; }
+  .read-author { color: var(--ink-muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; }
+
+  .posts {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-direction: column;
+  }
+  .posts li + li { border-top: 1px dashed var(--line-soft); }
+  .posts a {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 4px;
+    text-decoration: none;
+    color: var(--ink);
+    font-family: var(--mono-ui);
+    font-size: 13px;
+    border-radius: 2px;
+    transition: background .15s ease, color .15s ease, padding .15s ease;
+  }
+  .posts a:hover {
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    padding-left: 10px;
+    color: var(--accent);
+  }
+  .posts a:hover .p-arrow { transform: translateX(3px); }
+  .p-date { color: var(--ink-muted); font-size: 11px; }
+  .p-title { color: var(--ink); letter-spacing: .01em; }
+  .posts a:hover .p-title { color: var(--accent); }
+  .p-meta { display: flex; gap: 10px; align-items: center; font-size: 11px; color: var(--ink-muted); }
+  .p-tag { color: var(--accent); opacity: .8; }
+  .p-read { color: var(--ink-muted); }
+  .p-arrow { color: var(--ink-muted); transition: transform .18s ease; }
+
+  .home-cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 4px 0;
+  }
+  .home-cta-hint {
+    margin-left: auto;
+    font-family: var(--mono-ui);
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+</style>

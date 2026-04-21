@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/primitives/SectionHeader.astro';
+import Win from '../components/primitives/Win.astro';
+import { author } from '../config/author';
+---
+<BaseLayout title="privacy" description="Privacy policy for joaoaleixo.com — short version: I don't collect anything.">
+  <div class="page-enter privacy">
+    <SectionHeader
+      kicker="// cat ./privacy.md"
+      num="07"
+      title="privacy"
+      subtitle="short version: I don't collect anything."
+    />
+
+    <Win title="privacy.md" hasFooter>
+      <div slot="footer">
+        <span>last reviewed · {new Date().toISOString().slice(0, 10)}</span>
+        <span>tl;dr — no cookies, no analytics</span>
+      </div>
+
+      <div class="prose">
+        <p>
+          This page is about keeping things straightforward and making sure you know how
+          your privacy is handled on this site. Anything below applies to
+          <strong>joaoaleixo.com</strong>. Questions or concerns? Drop me a line at
+          <a href={`mailto:${author.email}`}>{author.email}</a>.
+        </p>
+
+        <ul>
+          <li>The content on this site is my personal take on things. Unless stated otherwise, it doesn't reflect the views of anyone else I might be associated with.</li>
+          <li>I'm not liable for issues caused by third-party services linked to from here.</li>
+          <li>These policies apply to every page under this domain.</li>
+        </ul>
+
+        <h2>// the promise</h2>
+        <p>
+          Here, you're more than a visitor — you're a guest. I don't collect personal
+          information about you. I don't have it, don't want it, can't lose it.
+        </p>
+        <p>
+          There's no analytics script. No advertising. No tracking pixels. No newsletter
+          signup quietly doubling as a mailing list. The site is static HTML, shipped to
+          your browser and that's it.
+        </p>
+
+        <h2>// first party</h2>
+        <p>
+          I don't set any cookies or local-storage keys for tracking. The only things
+          this site stores locally — in <code>localStorage</code>, on your device,
+          never transmitted — are your visual preferences (accent colour, theme,
+          scanlines, font pairing) so the site looks the way you left it next time.
+          Clear your site data and they're gone.
+        </p>
+
+        <h2>// third party</h2>
+        <p>
+          I lean on a couple of services to get the site in front of you. Here's the list:
+        </p>
+
+        <h3>Hosting / CDN</h3>
+        <p>
+          This site is deployed as a static bundle and served through a CDN. The hosting
+          provider may collect request-level data (IP address, user agent, request path)
+          for operational reasons — rate limits, abuse prevention, basic error logs.
+          I don't have access to aggregated visitor reports.
+        </p>
+
+        <h3>Google Fonts</h3>
+        <p>
+          Fonts are loaded from Google Fonts. Your browser fetches font files directly
+          from their servers, which means Google may collect usage data. See their
+          <a href="https://developers.google.com/fonts/faq/privacy" target="_blank" rel="noopener noreferrer">privacy FAQ</a>
+          for details. If this bothers you, the site degrades gracefully to system
+          monospace fonts.
+        </p>
+
+        <h3>Outbound links</h3>
+        <p>
+          Some pages link out to GitHub, LinkedIn, Stack Overflow, and similar. Those
+          sites have their own privacy practices — your controls are in your hands
+          once you leave here.
+        </p>
+
+        <h2>// the bigger picture</h2>
+        <p>
+          I aim to minimize tracking to effectively zero, but the broader web still
+          tracks in ways I don't fully control (CDN logs, browser fingerprinting, ISPs).
+          Use an ad blocker. Use a browser that respects you. Use DNS-level filtering
+          if you want belt-and-braces. You probably already do.
+        </p>
+
+        <p class="sig">— João</p>
+      </div>
+    </Win>
+  </div>
+</BaseLayout>
+
+<style>
+  .privacy { display: flex; flex-direction: column; gap: 20px; }
+  .prose {
+    font-family: var(--mono-body);
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+    max-width: 72ch;
+  }
+  .prose p { margin: 0 0 14px; }
+  .prose strong { color: var(--ink); }
+  .prose ul { margin: 0 0 16px; padding-left: 18px; }
+  .prose ul li { padding: 2px 0; }
+  .prose code {
+    font-family: var(--mono-ui);
+    font-size: 12.5px;
+    padding: 1px 5px;
+    background: var(--panel-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+    color: var(--ink);
+  }
+  .prose h2 {
+    font-family: var(--mono-display);
+    font-size: 18px;
+    color: var(--accent);
+    margin: 28px 0 10px;
+    letter-spacing: .02em;
+  }
+  .prose h3 {
+    font-family: var(--mono-ui);
+    font-size: 12px;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    margin: 18px 0 6px;
+  }
+  .prose a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dashed color-mix(in oklab, var(--accent) 40%, var(--line));
+  }
+  .prose a:hover { border-bottom-style: solid; }
+  .sig {
+    margin-top: 28px !important;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+</style>

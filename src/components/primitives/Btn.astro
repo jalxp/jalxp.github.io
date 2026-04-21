@@ -1,0 +1,48 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'ghost';
+  icon?: string;
+}
+const { href, variant = 'ghost', icon } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+<Tag class:list={['btn', variant]} href={href} type={href ? undefined : 'button'}>
+  {icon && <span class="btn-icon">{icon}</span>}
+  <span class="btn-label"><slot /></span>
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--mono-ui);
+    font-size: 12px;
+    letter-spacing: .06em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .btn:hover {
+    color: var(--accent);
+    border-color: color-mix(in oklab, var(--accent) 50%, var(--line));
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .btn.primary:hover {
+    background: transparent;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .btn-icon { font-size: 11px; }
+</style>

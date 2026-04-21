@@ -1,9 +1,0 @@
-{% if site.google_analytics %}
-  <script>!function (w, d) {
-    window.dataLayer = w.dataLayer || [];
-    function gtag() {dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '{{ site.google_analytics }}');
-    w.loadJSDeferred('https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}');
-  }(window, document);</script>
-{% endif %}

@@ -1,0 +1,314 @@
+---
+import SidebarTheme from './islands/SidebarTheme.tsx';
+import SocialIcon from './primitives/SocialIcon.astro';
+import { author } from '../config/author';
+import { site } from '../config/site';
+
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => {
+  const n = href.replace(/\/+$/, '') || '/';
+  return n === '/' ? pathname === '/' : pathname === n || pathname.startsWith(n + '/');
+};
+
+const formatUptime = (sinceIso: string, now: Date) => {
+  const s = new Date(sinceIso);
+  let years = now.getFullYear() - s.getFullYear();
+  const anchor = new Date(s);
+  anchor.setFullYear(s.getFullYear() + years);
+  if (anchor > now) { years -= 1; anchor.setFullYear(s.getFullYear() + years); }
+  const days = Math.floor((now.getTime() - anchor.getTime()) / 86400000);
+  return `${years}y ${days}d`;
+};
+const uptimeInitial = formatUptime(author.since, new Date());
+---
+<aside class="side">
+  <div class="side-inner">
+    <div class="side-head">
+      <div class="brand">
+        <span class="brand-mark">{author.avatar.mark}</span>
+        <div class="brand-meta">
+          <div class="brand-name">{author.name}</div>
+          <div class="brand-role">
+            <span class="dot" /> {author.role}
+          </div>
+        </div>
+      </div>
+
+      <div class="portrait">
+        {author.avatar.image ? (
+          <img src={author.avatar.image} alt={author.name} />
+        ) : (
+          <svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+            <defs>
+              <pattern id="scan-p" width="3" height="3" patternUnits="userSpaceOnUse">
+                <rect width="3" height="1.2" fill="rgba(0,0,0,.25)"/>
+              </pattern>
+              <linearGradient id="crt-g" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="var(--accent)" stop-opacity=".1"/>
+                <stop offset="1" stop-color="var(--accent)" stop-opacity=".25"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="116" height="116" rx="4" fill="var(--panel-2)" stroke="var(--line)"/>
+            <rect x="2" y="2" width="116" height="116" rx="4" fill="url(#crt-g)"/>
+            <rect x="2" y="2" width="116" height="116" rx="4" fill="url(#scan-p)"/>
+            <text x="60" y="76"
+                  font-family="var(--mono-display), monospace"
+                  font-size="52" font-weight="700"
+                  fill="var(--accent)" text-anchor="middle"
+                  style="filter: drop-shadow(0 0 6px color-mix(in oklab, var(--accent) 55%, transparent));"
+            >{author.avatar.mark}</text>
+            <g stroke="var(--line)" stroke-width="1">
+              <line x1="2"   y1="12"  x2="12"  y2="12"/>
+              <line x1="12"  y1="2"   x2="12"  y2="12"/>
+              <line x1="108" y1="12"  x2="118" y2="12"/>
+              <line x1="108" y1="2"   x2="108" y2="12"/>
+              <line x1="2"   y1="108" x2="12"  y2="108"/>
+              <line x1="12"  y1="108" x2="12"  y2="118"/>
+              <line x1="108" y1="108" x2="118" y2="108"/>
+              <line x1="108" y1="108" x2="108" y2="118"/>
+            </g>
+          </svg>
+        )}
+      </div>
+    </div>
+
+    <div class="side-nav">
+      <div class="side-label"><span>NAVIGATE</span></div>
+      <ul>
+        {site.menu.map((item) => (
+          <li>
+            <a class:list={['nav-btn', { active: isActive(item.href) }]} href={item.href}>
+              <span class="nav-arrow">{isActive(item.href) ? '▸' : ' '}</span>
+              <span class="nav-label">{item.label}</span>
+              <span class="nav-key">[{item.key}]</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="side-sys">
+      <div class="side-label"><span>SYSTEM</span></div>
+      <div class="clock">
+        <div class="clock-line"><span class="k">DATE</span><span class="v tabnum" id="sb-date">----.--.--</span></div>
+        <div class="clock-line"><span class="k">TIME</span><span class="v tabnum" id="sb-time">--:--:--</span></div>
+        <div class="clock-line"><span class="k">ZONE</span><span class="v">WET/UTC+0</span></div>
+      </div>
+      <div class="sys-meta">
+        <div><span class="k">HOST</span><span class="v">joao.local</span></div>
+        <div><span class="k">SWIFT</span><span class="v">6.0</span></div>
+        <div><span class="k">XCODE</span><span class="v">26.4.1</span></div>
+        <div><span class="k">UPTIME</span><span class="v tabnum" id="sb-uptime" data-since={author.since}>{uptimeInitial}</span></div>
+      </div>
+    </div>
+
+    <div class="side-theme">
+      <div class="side-label"><span>THEME</span></div>
+      <SidebarTheme client:only="react" />
+    </div>
+
+    <div class="side-foot">
+      {author.socials.map((s) => (
+        <a class="icon-btn" href={s.url} title={s.name} target={s.url.startsWith('http') ? '_blank' : undefined} rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}>
+          <SocialIcon name={s.name} size={14} />
+        </a>
+      ))}
+    </div>
+  </div>
+</aside>
+
+<script is:inline>
+  (() => {
+    const $date = document.getElementById('sb-date');
+    const $time = document.getElementById('sb-time');
+    const $uptime = document.getElementById('sb-uptime');
+    if (!$date || !$time) return;
+    const pad = (n) => String(n).padStart(2, '0');
+    const tickUptime = () => {
+      if (!$uptime) return;
+      const since = $uptime.dataset.since;
+      if (!since) return;
+      const s = new Date(since);
+      const now = new Date();
+      let years = now.getFullYear() - s.getFullYear();
+      const anchor = new Date(s);
+      anchor.setFullYear(s.getFullYear() + years);
+      if (anchor > now) { years -= 1; anchor.setFullYear(s.getFullYear() + years); }
+      const days = Math.floor((now - anchor) / 86400000);
+      $uptime.textContent = `${years}y ${days}d`;
+    };
+    const tick = () => {
+      const d = new Date();
+      $date.textContent = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      $time.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    };
+    tick();
+    tickUptime();
+    setInterval(tick, 1000);
+    setInterval(tickUptime, 60_000);
+  })();
+</script>
+
+<style>
+  .side {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 280px;
+    border-right: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    display: flex;
+    z-index: 10;
+  }
+  .side-inner {
+    flex: 1;
+    padding: 22px 20px;
+    display: flex; flex-direction: column; gap: 22px;
+    min-width: 0;
+    overflow-y: auto;
+  }
+
+  .side-head { display: flex; flex-direction: column; gap: 14px; }
+  .brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .brand-mark {
+    font-family: var(--mono-display), ui-monospace, monospace;
+    font-size: 24px;
+    color: var(--accent);
+    text-shadow: 0 0 6px color-mix(in oklab, var(--accent) 55%, transparent);
+    line-height: 1;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--panel);
+  }
+  .brand-meta { min-width: 0; overflow: hidden; }
+  .brand-name {
+    font-family: var(--mono-ui); font-size: 13px; font-weight: 700;
+    color: var(--ink); letter-spacing: .02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .brand-role {
+    font-family: var(--mono-ui); font-size: 11px; color: var(--ink-dim);
+    display: flex; align-items: center; gap: 6px; margin-top: 2px;
+  }
+  .brand-role .dot {
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+    animation: sb-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes sb-pulse { 50% { opacity: .4; transform: scale(.8); } }
+
+  .portrait {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--panel);
+    padding: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .portrait img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 3px;
+    filter: contrast(1.05) saturate(.9);
+  }
+
+  .side-label {
+    font-family: var(--mono-ui);
+    font-size: 10px;
+    color: var(--ink-muted);
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .side-label::before, .side-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: repeating-linear-gradient(90deg, var(--line) 0 4px, transparent 4px 7px);
+  }
+
+  .side-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .nav-btn {
+    width: 100%;
+    display: grid; grid-template-columns: 16px 1fr auto; gap: 8px;
+    align-items: center;
+    padding: 7px 10px;
+    background: transparent; border: 1px solid transparent;
+    color: var(--ink-dim);
+    font-family: var(--mono-ui); font-size: 13px;
+    cursor: pointer; border-radius: 3px;
+    text-align: left;
+    text-decoration: none;
+    transition: all .15s ease;
+  }
+  .nav-btn:hover {
+    color: var(--ink);
+    background: var(--panel);
+    border-color: var(--line-soft);
+  }
+  .nav-btn.active {
+    color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 10%, var(--panel));
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+    text-shadow: 0 0 6px color-mix(in oklab, var(--accent) 45%, transparent);
+  }
+  .nav-btn .nav-arrow { color: var(--accent); width: 12px; font-size: 11px; white-space: pre; }
+  .nav-btn .nav-key {
+    font-size: 10px; color: var(--ink-muted);
+    border: 1px solid var(--line-soft);
+    padding: 1px 4px; border-radius: 2px;
+  }
+  .nav-btn.active .nav-key {
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+    color: var(--accent);
+  }
+
+  .side-sys { display: flex; flex-direction: column; gap: 10px; }
+  .clock { display: flex; flex-direction: column; gap: 2px; }
+  .clock-line {
+    display: grid; grid-template-columns: 48px 1fr; gap: 10px;
+    font-family: var(--mono-ui); font-size: 11px;
+  }
+  .clock-line .k, .sys-meta .k {
+    color: var(--ink-muted); letter-spacing: .1em;
+  }
+  .clock-line .v, .sys-meta .v { color: var(--ink-dim); }
+  .sys-meta {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px;
+    font-family: var(--mono-ui); font-size: 11px;
+  }
+  .sys-meta .k { margin-right: 6px; }
+  .tabnum { font-variant-numeric: tabular-nums; }
+
+  .side-foot {
+    margin-top: auto;
+    display: flex; gap: 8px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+  }
+  .icon-btn {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    font-family: var(--mono-ui); font-size: 12px;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: all .15s ease;
+  }
+  .icon-btn:hover {
+    color: var(--accent); border-color: var(--accent);
+    box-shadow: 0 0 10px color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+
+  @media (max-width: 900px) {
+    .side {
+      position: static; width: 100%; height: auto;
+      border-right: none; border-bottom: 1px solid var(--line);
+    }
+    .side-inner { max-height: none; overflow: visible; }
+  }
+</style>

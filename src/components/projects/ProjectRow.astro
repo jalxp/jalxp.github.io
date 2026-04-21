@@ -1,0 +1,166 @@
+---
+interface Props {
+  slug: string;
+  name: string;
+  tagline: string;
+  kind: string;
+  year: string;
+  status: string;
+  tech: readonly string[];
+  description: string;
+  link?: string;
+  repo?: string;
+}
+
+const { slug, name, tagline, kind, year, status, tech, description, link, repo } = Astro.props;
+const kindLabel = kind.replace('-', ' ');
+---
+<div class="pr" data-kind={kind}>
+  <header class="pr-head">
+    <div class="pr-meta">
+      <span class="pr-kind">{kindLabel}</span>
+      <span class="pr-sep">·</span>
+      <span class="pr-year tabnum">{year}</span>
+    </div>
+    <span class:list={['pr-status', `s-${status}`]}>
+      <span class="dot" />{status}
+    </span>
+
+    <a class="pr-name" href={`/projects/${slug}/`}>{name}</a>
+    <p class="pr-tag">{tagline}</p>
+  </header>
+
+  <p class="pr-desc">{description}</p>
+
+  <div class="pr-foot">
+    {tech.length > 0 && (
+      <div class="pr-tech">
+        {tech.map((t) => <span class="chip">{t}</span>)}
+      </div>
+    )}
+    {(link || repo) && (
+      <div class="pr-links">
+        {link && <a href={link} target="_blank" rel="noopener noreferrer">visit →</a>}
+        {repo && <a href={repo} target="_blank" rel="noopener noreferrer">repo →</a>}
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .pr { padding: 22px 0; }
+  .pr + .pr { border-top: 1px dashed var(--line); }
+
+  .pr-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 16px;
+    align-items: start;
+  }
+
+  .pr-meta {
+    grid-column: 1;
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--mono-ui);
+    font-size: 10px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: .16em;
+  }
+  .pr-kind { color: var(--accent); }
+  .pr-sep { color: var(--line); }
+  .pr-year { color: var(--ink-muted); letter-spacing: .08em; }
+
+  .pr-status {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 10px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    font-family: var(--mono-ui);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+  .pr-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-muted); }
+  .s-shipping, .s-live {
+    color: var(--accent);
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+  }
+  .s-shipping .dot, .s-live .dot {
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+  }
+  .s-beta, .s-wip, .s-in-progress {
+    color: var(--amber);
+    border-color: color-mix(in oklab, var(--amber) 40%, var(--line));
+  }
+  .s-beta .dot, .s-wip .dot, .s-in-progress .dot { background: var(--amber); }
+  .s-archived { color: var(--ink-muted); opacity: .85; }
+
+  .pr-name {
+    grid-column: 1 / -1;
+    font-family: var(--mono-display);
+    font-size: 28px;
+    line-height: 1.1;
+    color: var(--ink);
+    text-decoration: none;
+    margin-top: 4px;
+    transition: color .15s ease, text-shadow .15s ease;
+  }
+  .pr-name::before { content: '› '; color: var(--accent); opacity: .6; }
+  .pr-name:hover {
+    color: var(--accent);
+    text-shadow: 0 0 12px color-mix(in oklab, var(--accent) 40%, transparent);
+  }
+  .pr-tag {
+    grid-column: 1 / -1;
+    margin: 2px 0 0;
+    font-family: var(--mono-ui);
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+
+  .pr-desc {
+    margin: 12px 0 0;
+    font-family: var(--mono-body);
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+    max-width: 72ch;
+  }
+
+  .pr-foot {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .pr-tech { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pr-links {
+    display: flex;
+    gap: 16px;
+    margin-left: auto;
+    font-family: var(--mono-ui);
+    font-size: 12px;
+  }
+  .pr-links a {
+    color: var(--ink-dim);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--line);
+  }
+  .pr-links a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  @media (max-width: 600px) {
+    .pr-head { grid-template-columns: 1fr; }
+    .pr-status { grid-column: 1; grid-row: auto; }
+    .pr-links { margin-left: 0; }
+  }
+</style>

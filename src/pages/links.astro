@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/primitives/SectionHeader.astro';
+import Win from '../components/primitives/Win.astro';
+import SocialIcon from '../components/primitives/SocialIcon.astro';
+import { author } from '../config/author';
+
+const extras = [
+  { name: 'Résumé',  url: '/joao-aleixo-resume.pdf', handle: 'pdf, one page' },
+  { name: 'RSS',     url: '/rss.xml',                handle: 'writing feed' },
+  { name: 'Writing', url: '/writing/',               handle: 'posts on this site' },
+  { name: 'Uses',    url: '/uses/',                  handle: 'hardware, editors, services' },
+  { name: 'Privacy', url: '/privacy/',               handle: 'short — no tracking' },
+];
+---
+<BaseLayout title="links" description="All the links — socials, résumé, RSS, email.">
+  <div class="page-enter links">
+    <SectionHeader
+      kicker="// ls ./links"
+      num="09"
+      title="links"
+      subtitle="everywhere I am on the internet"
+    />
+
+    <Win title="links.md" hasFooter>
+      <div slot="footer">
+        <span>{author.socials.length + extras.length} entries</span>
+        <span>direct links, no redirects</span>
+      </div>
+
+      <div class="sect-label">// socials</div>
+      <ul class="l-list">
+        {author.socials.map((s) => (
+          <li>
+            <a href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}>
+              <span class="l-icon"><SocialIcon name={s.name} size={14} /></span>
+              <span class="l-name">{s.name}</span>
+              <span class="l-handle">{s.handle}</span>
+              <span class="l-arrow">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="sect-label">// elsewhere on this site</div>
+      <ul class="l-list">
+        {extras.map((s) => (
+          <li>
+            <a href={s.url} target={s.url.startsWith('http') ? '_blank' : undefined} rel={s.url.startsWith('http') ? 'noopener noreferrer' : undefined}>
+              <span class="l-icon"><SocialIcon name={s.name} size={14} /></span>
+              <span class="l-name">{s.name}</span>
+              <span class="l-handle">{s.handle}</span>
+              <span class="l-arrow">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Win>
+  </div>
+</BaseLayout>
+
+<style>
+  .links { display: flex; flex-direction: column; gap: 20px; }
+
+  .sect-label {
+    font-family: var(--mono-ui);
+    font-size: 10px;
+    color: var(--ink-muted);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    margin: 4px 0 10px;
+  }
+  .sect-label:not(:first-child) { margin-top: 24px; }
+
+  .l-list { list-style: none; margin: 0; padding: 0; }
+  .l-list li + li { border-top: 1px dashed var(--line-soft); }
+  .l-list a {
+    display: grid;
+    grid-template-columns: 28px 1fr auto 14px;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 6px;
+    font-family: var(--mono-ui);
+    font-size: 13px;
+    color: var(--ink);
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background .15s ease, padding .15s ease, color .15s ease;
+  }
+  .l-list a:hover {
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    padding-left: 12px;
+    color: var(--accent);
+  }
+  .l-list a:hover .l-arrow { transform: translateX(3px); color: var(--accent); }
+  .l-list a:hover .l-handle { color: var(--accent); opacity: .85; }
+
+  .l-icon {
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line);
+    color: var(--accent);
+    border-radius: 3px;
+    background: var(--panel-2);
+  }
+  .l-icon :global(svg) { display: block; }
+  .l-name { color: var(--ink); letter-spacing: .02em; }
+  .l-handle { color: var(--ink-muted); font-size: 11px; text-align: right; }
+  .l-arrow { color: var(--ink-muted); transition: transform .18s ease, color .15s ease; font-size: 12px; }
+
+  @media (max-width: 560px) {
+    .l-list a { grid-template-columns: 24px 1fr 14px; }
+    .l-handle { display: none; }
+  }
+</style>

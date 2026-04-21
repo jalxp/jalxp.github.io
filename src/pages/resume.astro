@@ -1,0 +1,304 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/primitives/SectionHeader.astro';
+import Win from '../components/primitives/Win.astro';
+import Btn from '../components/primitives/Btn.astro';
+import StatRow from '../components/primitives/StatRow.astro';
+import AsciiDivider from '../components/primitives/AsciiDivider.astro';
+import { resume } from '../config/resume';
+import { author } from '../config/author';
+
+const fmtDate = (iso: string | null | undefined): string => {
+  if (!iso) return 'present';
+  const [y, m] = iso.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[Number(m) - 1]} ${y}`;
+};
+
+const yearRange = (s: string, e: string) => {
+  const sy = s.split('-')[0];
+  const ey = e ? e.split('-')[0] : 'present';
+  return `${sy} — ${ey}`;
+};
+---
+<BaseLayout title="résumé" description="Résumé of João Aleixo — iOS engineer in Coimbra.">
+  <div class="page-enter resume">
+    <SectionHeader
+      kicker="// cat resume.txt"
+      num="05"
+      title="résumé"
+      subtitle="the structured view"
+    />
+
+    <Win title="resume.txt — read-only" hasMenu>
+      <div slot="menu" class="menu-row">
+        <span class="menu-item">File</span>
+        <span class="menu-item">Edit</span>
+        <span class="menu-item">View</span>
+        <div class="actions">
+          <Btn icon="⬇" variant="primary" href={resume.pdf}>download .pdf</Btn>
+        </div>
+      </div>
+
+      <div class="r-head">
+        <div>
+          <div class="r-name">{author.name}</div>
+          <div class="r-role">{author.role} · {author.location}</div>
+        </div>
+        <div class="r-meta">
+          <div>{author.email}</div>
+          <div>joaoaleixo.com</div>
+          <div>github.com/{author.socials.find((s) => s.name === 'GitHub')?.handle}</div>
+        </div>
+      </div>
+
+      <div class="r-section">
+        <div class="r-label">SUMMARY</div>
+        <p class="r-p">{resume.summary}</p>
+      </div>
+
+      <AsciiDivider label="experience" />
+
+      <div class="r-section">
+        {resume.work.map((j) => (
+          <div class="job">
+            <div class="job-head">
+              <div>
+                <div class="job-role">
+                  {j.position} <span class="job-at">at</span>{' '}
+                  <span class="job-co">{j.company}</span>
+                </div>
+                <div class="job-loc">remote · {author.location}</div>
+              </div>
+              <div class="job-dates tabnum">
+                <span>{fmtDate(j.startDate)}</span>
+                <span class="sep">—</span>
+                <span>{fmtDate(j.endDate)}</span>
+              </div>
+            </div>
+            <p class="r-p job-sum">{j.summary}</p>
+            <ul class="job-b">
+              {j.highlights.map((b) => <li>{b}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {resume.volunteer.length > 0 && (
+        <>
+          <AsciiDivider label="volunteer" />
+          <div class="r-section">
+            {resume.volunteer.map((v) => (
+              <div class="job">
+                <div class="job-head">
+                  <div>
+                    <div class="job-role">
+                      {v.position} <span class="job-at">at</span>{' '}
+                      <span class="job-co">{v.organization}</span>
+                    </div>
+                  </div>
+                </div>
+                <p class="r-p job-sum">{v.summary}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      <AsciiDivider label="education" />
+
+      <div class="r-grid">
+        <div class="r-section">
+          <div class="r-label">EDUCATION</div>
+          {resume.education.map((e) => (
+            <div class="edu">
+              <div class="edu-degree">{e.studyType} · {e.area}</div>
+              <div class="edu-school">{e.institution}</div>
+              <div class="edu-year tabnum">{yearRange(e.startDate, e.endDate)}</div>
+            </div>
+          ))}
+        </div>
+
+        <div class="r-section">
+          <div class="r-label">LANGUAGES</div>
+          {resume.languages.map((l) => (
+            <StatRow k={l.language} v={l.fluency} />
+          ))}
+        </div>
+      </div>
+
+      <AsciiDivider label="skills" />
+
+      <div class="r-section">
+        <div class="skills-grid">
+          {resume.skills.map((s) => (
+            <div class="skill-group">
+              <div class="r-label small">{s.name}</div>
+              <div class="skill-chips">
+                {s.keywords.map((k) => <span class="chip">{k}</span>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <AsciiDivider label="interests" />
+
+      <div class="r-section">
+        <div class="skills-grid">
+          {resume.interests.map((i) => (
+            <div class="skill-group">
+              <div class="r-label small">{i.name}</div>
+              <div class="skill-chips">
+                {i.keywords.map((k) => <span class="chip">{k}</span>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Win>
+  </div>
+</BaseLayout>
+
+<style>
+  .resume { display: flex; flex-direction: column; gap: 20px; }
+
+  .menu-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+  }
+  .menu-item { color: var(--ink-muted); cursor: default; }
+  .actions { margin-left: auto; display: flex; gap: 8px; }
+
+  .r-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .r-name {
+    font-family: var(--mono-display);
+    font-size: 38px;
+    line-height: 1.1;
+    color: var(--ink);
+    padding-bottom: 4px;
+  }
+  .r-role {
+    font-family: var(--mono-ui);
+    font-size: 13px;
+    color: var(--accent);
+    margin-top: 10px;
+  }
+  .r-meta {
+    font-family: var(--mono-ui);
+    font-size: 11px;
+    color: var(--ink-dim);
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .r-section { padding: 18px 0; }
+  .r-label {
+    font-family: var(--mono-ui);
+    font-size: 10px;
+    letter-spacing: .22em;
+    color: var(--accent);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .r-label.small { margin-bottom: 8px; font-size: 9px; }
+
+  .r-p {
+    font-family: var(--mono-body);
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--ink);
+    margin: 0;
+    max-width: 760px;
+  }
+
+  .job { padding: 10px 0 18px; }
+  .job + .job {
+    border-top: 1px dashed var(--line-soft);
+    margin-top: 14px;
+  }
+  .job-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .job-role {
+    font-family: var(--mono-ui);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .job-at { color: var(--ink-muted); font-weight: 400; }
+  .job-co { color: var(--accent); }
+  .job-loc {
+    font-family: var(--mono-ui);
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 2px;
+  }
+  .job-dates {
+    font-family: var(--mono-ui);
+    font-size: 11px;
+    color: var(--ink-dim);
+  }
+  .job-dates .sep { margin: 0 6px; color: var(--ink-muted); }
+  .job-sum { color: var(--ink-dim); margin-top: 8px; }
+  .job-b {
+    margin: 10px 0 0;
+    padding: 0 0 0 18px;
+    font-family: var(--mono-body);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-dim);
+  }
+  .job-b li { padding: 3px 0; }
+  .job-b li::marker { color: var(--accent); }
+
+  .r-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 36px; }
+  @media (max-width: 800px) { .r-grid { grid-template-columns: 1fr; } }
+
+  .edu { padding: 6px 0; }
+  .edu + .edu {
+    border-top: 1px dashed var(--line-soft);
+    margin-top: 8px;
+    padding-top: 10px;
+  }
+  .edu-degree {
+    font-family: var(--mono-ui);
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .edu-school {
+    font-family: var(--mono-ui);
+    font-size: 12px;
+    color: var(--accent);
+    margin-top: 2px;
+  }
+  .edu-year {
+    font-family: var(--mono-ui);
+    font-size: 11px;
+    color: var(--ink-muted);
+    margin-top: 2px;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .skill-group { display: flex; flex-direction: column; }
+  .skill-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+</style>
