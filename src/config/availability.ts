@@ -1,6 +1,3 @@
-// Availability signals on /contact. Edit these any time — they render as a
-// colored dot + short label. Use 'green' / 'amber' / 'red' for the status.
-
 export const availability = [
   { status: 'green', key: 'collaborations', value: 'interesting problems only' },
   { status: 'green', key: 'coffee chats',   value: 'always yes' },

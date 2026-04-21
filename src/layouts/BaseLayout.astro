@@ -17,8 +17,7 @@ const { title, description, ogImage, ogType = 'website' } = Astro.props;
 const pageTitle = title ? `${title} — ${site.title}` : site.title;
 const pageDesc = description ?? site.description;
 const canonical = new URL(Astro.url.pathname, site.url).toString();
-// Pick the best OG image: explicit prop > generated per-slug > default.
-// The /og/[...slug].png route exists for posts + top-level pages.
+// OG image: explicit prop > generated /og/<slug>.png > /og-default.svg
 const ogSlug = (() => {
   const p = Astro.url.pathname.replace(/\/+$/, '').replace(/^\/+/, '');
   if (!p) return 'default';
@@ -40,7 +39,7 @@ const scanlines = site.defaults.scanlines;
 
 const navRoutes = site.menu.map((m) => m.href);
 
-// CSP applied only in prod builds — dev mode needs looser rules for Vite HMR.
+// CSP applied only in prod builds — dev needs looser rules for Vite HMR
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",
@@ -157,7 +156,7 @@ const crumbSeg = matched?.label ?? pathname.split('/').filter(Boolean).pop() ?? 
     <HelpOverlay client:only="react" menu={site.menu} />
 
     <script is:inline>
-      /* Stagger the grow-down reveal of every .win/.term in document order. */
+      /* stagger .win/.term grow-down reveal in document order */
       (() => {
         const run = () => {
           const nodes = document.querySelectorAll('.win, .term');

@@ -102,7 +102,7 @@ function runCommand(raw: string): CmdResult {
 
 export default function TerminalHero({ lines, sessionLabel = 'SESSION 001' }: Props) {
   const [shown, setShown] = useState(0);
-  const [typed, setTyped] = useState(0); // chars typed on the currently-typing prompt line
+  const [typed, setTyped] = useState(0); // chars typed on the current prompt line
   const [focused, setFocused] = useState(false);
   const [input, setInput] = useState('');
   const [output, setOutput] = useState<OutLine[]>([]);
@@ -135,7 +135,7 @@ export default function TerminalHero({ lines, sessionLabel = 'SESSION 001' }: Pr
       }
       const line = lines[i];
 
-      // output line (or blank prompt): commit instantly after a short beat
+      // output line (or blank prompt) — commit after a short beat
       if (!isPrompt(line) || line.v.trim().length === 0) {
         wait(() => {
           setShown(i + 1);
@@ -147,10 +147,9 @@ export default function TerminalHero({ lines, sessionLabel = 'SESSION 001' }: Pr
         return;
       }
 
-      // prompt line — type char by char, honoring tab-autocomplete
+      // prompt line — type char-by-char, pausing on tab-autocomplete markers
       if (c < line.v.length) {
         if (line.tab != null && c === line.tab) {
-          // pause like a user reaching for TAB, then insert the rest at once
           wait(() => {
             c = line.v.length;
             setTyped(c);

@@ -5,7 +5,7 @@ import { Resvg } from '@resvg/resvg-js';
 import { site } from '../../config/site';
 import { author } from '../../config/author';
 
-// Cache the font across renders — fetched once per build.
+// font fetched once per build, reused across renders
 let regularPromise: Promise<ArrayBuffer> | null = null;
 let boldPromise: Promise<ArrayBuffer> | null = null;
 
@@ -145,7 +145,7 @@ export const GET: APIRoute = async ({ props }) => {
                             lineHeight: 1.15,
                             color: ink,
                             letterSpacing: '0.01em',
-                            // Keep the title from overflowing — satori truncates by overflow hidden.
+                            // clamp long titles — satori honors line-clamp via overflow: hidden
                             display: '-webkit-box',
                             // @ts-ignore satori-style
                             WebkitBoxOrient: 'vertical',

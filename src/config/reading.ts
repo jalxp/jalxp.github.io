@@ -1,6 +1,3 @@
-// Currently on the shelf. Shown in the `// reading.log` panel on home.
-// Keep it short — the panel is a snapshot, not a library.
-
 export type ReadStatus = 'reading' | 'queued' | 'finished';
 
 export const reading: { title: string; author: string; status: ReadStatus }[] = [

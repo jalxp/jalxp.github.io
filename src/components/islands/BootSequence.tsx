@@ -15,7 +15,7 @@ export default function BootSequence() {
   const [gone, setGone] = useState(false);
 
   useEffect(() => {
-    // One-shot per browser session — don't repeat on client nav.
+    // one-shot per browser session — don't replay on client nav
     try {
       if (sessionStorage.getItem(SESSION_FLAG)) return;
       sessionStorage.setItem(SESSION_FLAG, '1');

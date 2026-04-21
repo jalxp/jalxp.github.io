@@ -48,7 +48,7 @@ const accents = [
       try { localStorage.setItem(KEY, JSON.stringify(p)); } catch {}
     };
 
-    // Mark active states based on whatever the head boot-script already applied.
+    // reflect the state that the head boot-script applied before paint
     const syncActive = () => {
       const accent = html.dataset.accent || 'green';
       const theme  = html.dataset.theme  || 'dark';
@@ -135,9 +135,7 @@ const accents = [
   }
   .theme-btn .tb-ic { color: var(--accent); width: 12px; text-align: center; }
 
-  /* Show only the spans for the currently active state. The head boot-script
-     sets html[data-theme] and body.scanlines before paint, so this resolves
-     correctly on first render — no flash. */
+  /* show only the span for the currently active theme/scanlines state */
   [data-when], [data-scan] { display: none; }
   :global(html[data-theme="dark"])  [data-when="dark"]  { display: inline; }
   :global(html[data-theme="light"]) [data-when="light"] { display: inline; }

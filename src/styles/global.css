@@ -28,7 +28,7 @@ a:hover { text-decoration: underline; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* window grow-down reveal — cascaded by inline delay set in BaseLayout */
+/* window grow-down reveal — staggered via inline delay in BaseLayout */
 .win, .term {
   transform-origin: top center;
   animation: winIn .34s cubic-bezier(.2,.75,.25,1) both;
@@ -53,9 +53,8 @@ a:hover { text-decoration: underline; }
   .win, .term { animation: none; }
 }
 
-/* scanlines overlay (opt-in via body class)
-   Uses mix-blend-mode: overlay so dark stripes only show on bright pixels —
-   keeps "phosphor" bits CRT-lined without darkening empty space. */
+/* scanlines overlay (opt-in via body class).
+   mix-blend-mode: overlay keeps dark stripes only on bright pixels. */
 body.scanlines::before {
   content: '';
   position: fixed; inset: 0;

@@ -1,6 +1,3 @@
-// Site-wide config — the single source of truth for title, nav, SEO, copyright.
-// Think of this as Hydejack's `_config.yml`.
-
 export const site = {
   url: 'https://joaoaleixo.com',
   title: 'João Aleixo',
@@ -11,12 +8,11 @@ export const site = {
   lang: 'en',
   locale: 'en_US',
 
-  // Optional: if set, posts get a "view source" link pointing at the raw
-  // markdown file on GitHub. Set to null to hide the link.
+  // set to 'owner/repo' to show a "view source" link on posts; null hides it
   repo: null as string | null,
   postsPath: 'site/src/content/writing',
 
-  // Sidebar / keyboard nav. Order matters — positions map to keys 1..N.
+  // order matters — positions map to keyboard shortcuts 1..N
   menu: [
     { key: '1', label: 'home',     href: '/' },
     { key: '2', label: 'about',    href: '/about/' },

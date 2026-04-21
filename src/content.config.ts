@@ -21,7 +21,6 @@ const projects = defineCollection({
     tagline: z.string(),
     kind: z.enum(['shipping-credit', 'homelab', 'game', 'side', 'tool', 'ios-app']),
     year: z.string(),
-    // shipping / live / beta / wip / archived / in-progress
     status: z.enum(['shipping', 'live', 'beta', 'wip', 'archived', 'in-progress']),
     tech: z.array(z.string()).default([]),
     description: z.string(),

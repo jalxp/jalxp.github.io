@@ -1,6 +1,3 @@
-// Life timeline shown on /about. Year · short event label · one-line description.
-// Only real entries — add more as they happen.
-
 export const timeline = [
   { year: String(new Date().getFullYear()), event: 'now', text: 'iOS engineer in Coimbra. Writing here more often.' },
   { year: '2020', event: 'hire',   text: 'joined GoodBarber as iOS developer' },

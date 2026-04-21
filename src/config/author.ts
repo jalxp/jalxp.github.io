@@ -1,6 +1,3 @@
-// Personal identity and social handles. Loaded everywhere that renders the
-// name, email, or a social link — never hardcode these in components.
-
 export const author = {
   name: 'João Aleixo',
   initials: 'J · A',
@@ -10,12 +7,8 @@ export const author = {
   timezone: 'Europe/Lisbon',       // UTC+0 / +1
   email: 'hello@joaoaleixo.com',
 
-  // Anchor for the sidebar UPTIME counter. Set to when you started your iOS
-  // career (or whatever milestone you want the sidebar to count from).
   since: '2020-09-19',
 
-  // Sidebar avatar. Set `image` to a path under /public (e.g. '/me.jpg') to
-  // use a real photo; otherwise the text `mark` renders as a CRT monogram.
   avatar: {
     mark: '{ja}',
     image: null as string | null,

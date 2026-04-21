@@ -1,7 +1,5 @@
 ---
-// Inline SVGs for social links. Unicode glyphs (⌨, ✉) don't render reliably
-// across the monospace fonts we ship — SVGs are font-independent.
-
+// SVGs instead of unicode glyphs — ⌨ / ✉ render inconsistently across mono fonts
 interface Props {
   name: string;   // matches author.socials[].name
   size?: number;

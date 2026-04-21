@@ -1,6 +1,3 @@
-// Homelab panel on the home page. Each node renders as a row with status
-// and short role. Keep the list short — prefer 4–6 rows.
-
 export const homelab = [
   { name: 'proxmox',   role: 'hypervisor',           status: 'up' },
   { name: 'arr-stack', role: 'media automation',     status: 'up' },

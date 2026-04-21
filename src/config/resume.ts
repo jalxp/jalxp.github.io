@@ -1,6 +1,4 @@
-// Resume data — ported from jalxp.github.io/_data/resume.yml.
-// The /resume page reads from this file.
-
+// ported from jalxp.github.io/_data/resume.yml
 export const resume = {
   summary:
     "I'm an iOS developer with 5+ years of experience specialising in native " +

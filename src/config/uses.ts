@@ -1,7 +1,3 @@
-// /uses — the hardware, editors, and services I reach for. Group-keyed so the
-// page can render a section per group in order. Tweak freely; any row with
-// `note` renders that as a dim trailing caption.
-
 export interface UseItem {
   name: string;
   note?: string;

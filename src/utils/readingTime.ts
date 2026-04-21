@@ -1,6 +1,3 @@
-// Rough reading time estimate. Strips markdown syntax, counts remaining words,
-// divides by 220 wpm. Good enough for post headers — not a research tool.
-
 const WPM = 220;
 
 export function readingTime(body: string): { minutes: number; words: number } {

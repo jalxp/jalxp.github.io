@@ -1,6 +1,3 @@
-// Topics João actively goes deep on. Shown on /about.
-// Keep this honest — only list things you've actually built / poked at.
-
 export const rabbitHoles = [
   { icon: '▣', key: 'homelab',  desc: 'Proxmox, arr stack, wireguard, pi-hole, romm' },
   { icon: '≋', key: 'networks', desc: 'wardriving, packet poking, "why is my tv phoning home"' },

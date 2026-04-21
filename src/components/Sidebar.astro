@@ -178,9 +178,8 @@ const uptimeInitial = formatUptime(author.since, new Date());
     setInterval(tick, 1000);
     setInterval(tickUptime, 60_000);
 
-    // Bytes are only knowable after resources have loaded. Wait for the load
-    // event, then poll once more after a beat to catch any late-completing
-    // entries (e.g. fonts that finish slightly after `load`).
+    // bytes/load are only knowable after resources finish — wait for `load`,
+    // then tick once more to catch late-completing entries (e.g. fonts).
     if (document.readyState === 'complete') {
       tickBytes();
       tickLoad();
@@ -193,9 +192,7 @@ const uptimeInitial = formatUptime(author.since, new Date());
       });
     }
 
-    // If the tab has been hidden for a long time, browsers throttle setInterval
-    // and the uptime can drift. Re-tick on visibility return so the value is
-    // always current the moment the user looks at it.
+    // background tabs throttle setInterval — re-tick on return to avoid drift
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) { tick(); tickUptime(); }
     });
