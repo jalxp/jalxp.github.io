@@ -7,7 +7,7 @@ export const author = {
   timezone: 'Europe/Lisbon',       // UTC+0 / +1
   email: 'hello@joaoaleixo.com',
 
-  since: '2020-09-19',
+  since: '2020-03-01',
 
   avatar: {
     mark: '{ja}',

@@ -1,5 +1,5 @@
 export const site = {
-  url: 'https://joaoaleixo.com',
+  url: 'https://www.joaoaleixo.com',
   title: 'João Aleixo',
   tagline: 'iOS engineer by day, chronic tinkerer by night.',
   description:

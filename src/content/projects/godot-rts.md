@@ -1,29 +1,31 @@
 ---
-name: "untitled 2D RTS"
+name: "Dokkaebi"
 tagline: "a 2D RTS, built slowly"
 kind: "game"
-year: "ongoing"
+year: "2026"
 status: "wip"
 tech: ["Godot", "GDScript"]
-description: "The gamedev itch that sat on my 'someday' list for a couple of years. No deadline, no scope, just the thing I open when I'm tired of Xcode."
-order: 30
+description: "A top-down 2D real-time strategy game in Godot — unit selection, resource gathering, buildings, and combat. The gamedev itch that got me started, now on the back burner behind Drawdown 391."
+order: 50
 ---
 
-Gamedev has been on my "someday" list for a long time. The only way it stopped
-being on that list was to open Godot and start.
+The project that got me actually making games instead of just meaning to. A
+top-down 2D real-time strategy game in Godot.
 
-## Current state
+## What's there
 
-- Unit selection + pathfinding.
-- Basic resource gathering loop.
-- Pile of TODOs longer than the line count.
+- **Unit control** — selection and pathfinding.
+- **A gathering loop** — carry-and-return resource collection with auto-cycle.
+- **Buildings** — build menus tied to selection, repair, and defensive traps.
+- **Combat** — auto-attack and context-sensitive targeting.
 
 ## Why Godot
 
 Free, not run by a public company, scene-based architecture that clicks with how
-I think, and GDScript stays out of the way. Plus the export pipeline is sane.
+I think, and GDScript stays out of the way. The export pipeline is sane.
 
 ## Status
 
-Still very much in progress. No release date, no name, no promises. Just the
-thing I work on when I'm tired of Xcode.
+On the back burner. It taught me enough Godot to start
+[Drawdown 391](/projects/drawdown-391/), which has most of my gamedev attention
+right now. I come back to it when I want to build systems instead of atmosphere.

@@ -5,14 +5,14 @@ kind: "shipping-credit"
 year: "2020 → present"
 status: "shipping"
 tech: ["Swift", "Objective-C", "UIKit", "SwiftUI", "CoreData", "Combine"]
-description: "My day job for five years. One iOS codebase that every customer app inherits from — which means a good caching decision ships to thousands of apps at once, and so does a bad one."
+description: "My day job for six years. One iOS codebase that every customer app inherits from — which means a good caching decision ships to thousands of apps at once, and so does a bad one."
 link: "https://goodbarber.com"
 order: 10
 ---
 
 GoodBarber is a no-code app builder. Every customer app — and there are thousands
 live on the App Store — is built on top of a shared iOS engine. That engine is
-where I've spent the last 5+ years.
+where I've spent the last 6+ years.
 
 ## What I work on
 

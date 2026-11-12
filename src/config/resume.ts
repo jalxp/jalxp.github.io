@@ -1,7 +1,7 @@
 // ported from jalxp.github.io/_data/resume.yml
 export const resume = {
   summary:
-    "I'm an iOS developer with 5+ years of experience specialising in native " +
+    "I'm an iOS developer with 6+ years of experience specialising in native " +
     'app development using Swift, UIKit, and SwiftUI. I focus on building ' +
     'performant, user-friendly experiences backed by solid architecture. ' +
     "I want to build things that feel great to use, make people's lives a " +
@@ -61,7 +61,7 @@ export const resume = {
   skills: [
     {
       name: 'Languages',
-      keywords: ['Swift', 'Objective-C', 'Python', 'Go', 'Rust', 'C'],
+      keywords: ['Swift', 'Objective-C', 'Python', 'Go', 'C'],
     },
     {
       name: 'Frameworks',
@@ -100,7 +100,7 @@ export const resume = {
     { name: 'Development', keywords: ['Game development'] },
     { name: 'Gaming',      keywords: ['Strategy'] },
     { name: 'Reading',     keywords: ['Manga', 'Sci-fi'] },
-    { name: 'Hobbies',     keywords: ['FPV racing', 'Learning to draw'] },
+    { name: 'Hobbies',     keywords: ['FPV racing'] },
   ],
 
   pdf: '/joao-aleixo-resume.pdf',
